@@ -9,6 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/examples/main",
+            "args": ["/media/yujr/cache/downshort/"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
