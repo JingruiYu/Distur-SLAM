@@ -23,7 +23,7 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::LK(Fram
     int cols = im2[0].cols;
 
 	std::vector<cv::Point2f> kpts1;
-	cv::goodFeaturesToTrack(im1[0],kpts1,500,0.01,5.0);
+	cv::goodFeaturesToTrack(im1[0],kpts1,100,0.01,5.0);
 
 	if (kpts1.size() < 20)
 	{

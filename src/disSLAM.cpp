@@ -33,6 +33,15 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     // std::cout <<  "last_pyr: " << lastFrame->img_pyr[0].size() << std::endl;
     std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastFrame,curFrame,false);
 
+    cv::Mat img_show = _img.clone();
+    std::vector<cv::Point2f> curKeyPt = kpts1_kpts2.second;
+    for(auto kp:curKeyPt)
+    {
+        cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
+    }
+    cv::imshow("corners", img_show);
+    cv::waitKey(0);
+
     cv::Mat Twc = poseSolver::PnP3Dwith2D(kpts1_kpts2);
 
     curFrame->setTwc(Twc);
