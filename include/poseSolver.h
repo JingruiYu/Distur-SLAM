@@ -15,9 +15,17 @@ public:
 	poseSolver();
 	~poseSolver();
 
+	static cv::Point3f birdPixel2Camera(cv::Point2f pt);
+	static cv::Point2f birdCamera2Pixel(cv::Point3f pt);
+
 	static cv::Mat PnP3Dwith2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > &kpts1_kpts2);
 
 public:
-
+	static const float bRow;
+	static const float bCol;
+	static const float cor;
+	static const float p2m;
+	static const float m2p;
+	static const float rear;
 };
 
