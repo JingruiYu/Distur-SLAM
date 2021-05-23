@@ -1,0 +1,22 @@
+/*************************************************************************
+	> File Name: include/tracking.h
+	> Author: 
+	> Mail: 
+	> Created Time: 2021年05月19日 星期三 16时14分03秒
+ ************************************************************************/
+
+#pragma once
+
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include "Frame.h"
+
+class tracking
+{
+public:
+	tracking(/* args */);
+	~tracking();
+
+	static std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > LK(Frame* refFrame, Frame* curFrame, bool doubleCheck);
+};
+
