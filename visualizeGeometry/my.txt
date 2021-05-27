@@ -1,0 +1,211 @@
+./Samples/RoomCapture/ViewController.mm:			_captureSession.streamingEnabled = YES;
+./Samples/RoomCapture/ViewController.mm:		_captureSession.lensDetection = STLensDetectorWarnOnMismatch;
+./Samples/RoomCapture/ViewController.mm:		_captureSession.properties = STCaptureSessionPropertiesSetColorCameraAutoExposureISOAndWhiteBalance();
+./Samples/RoomCapture/ViewController.mm:	_captureSession.streamingEnabled = YES;
+./Samples/RoomCapture/ViewController.mm:		_captureSession.properties = STCaptureSessionPropertiesLockAllColorCameraPropertiesToCurrent();
+./Samples/RoomCapture/ViewController.mm:		_captureSession.lensDetection = STLensDetectorOff;
+./Samples/RoomCapture/ViewController.mm:	_captureSession.streamingEnabled = NO;
+./Samples/RoomCapture/ViewController.mm:    STCaptureSessionUserInstruction userInstructions = _captureSession.userInstructions;
+./Samples/RoomCapture/ViewController.mm:    // is available use `_captureSession.calibrationType >= STCalibrationTypeApproximate`
+./Samples/RoomCapture/ViewController.mm:    if (_captureSession.sensorMode == STCaptureSessionSensorModeWakingUp)
+./Samples/RoomCapture/ViewController.mm:        switch (_captureSession.calibrationType)
+./Samples/RoomCapture/ViewController.mm:                if (_captureSession.lens == STLensWideVision)
+./Samples/RoomCapture/ViewController.mm:    _captureSession.properties =
+./Samples/RoomCapture/ViewController.mm://    bool success = [_captureSession.occWriter startWriting:@"[AppDocuments]/RoomCapture.occ" appendDateAndExtension:NO];
+./Samples/RoomCapture/ViewController.mm:    if (_captureSession.occWriter.isWriting)
+./Samples/RoomCapture/ViewController.mm:        bool success = [_captureSession.occWriter cancelWriting];
+./Samples/RoomCapture/ViewController.mm:    if (_captureSession.occWriter.isWriting)
+./Samples/RoomCapture/ViewController.mm:        bool success = [_captureSession.occWriter stopWriting];
+./Samples/RoomCapture/ViewController.mm:    _captureSession.lens = sender.isOn ? STLensWideVision : STLensNormal;
+./Samples/RoomCapture/ViewController+LiDAR.mm:- (void)setupCaptureScene:(STCaptureSession *)captureSession  {
+./Samples/RoomCapture/ViewController+LiDAR.mm:		// the view itself is obtained from `captureSessionDidCreateArSession`
+./Samples/RoomCapture/ViewController+LiDAR.h:- (void)setupCaptureScene:(STCaptureSession *)captureSession;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:	if (_captureSession == nil)
+./Samples/RoomCapture/ViewController+CaptureSession.mm:        _captureSession = [STCaptureSession newCaptureSession];
+./Samples/RoomCapture/ViewController+CaptureSession.mm:        _captureSession.streamingEnabled = FALSE;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession.delegate = self;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession.arKitDelegate = self;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    [_captureSession startMonitoringWithOptions:sensorConfig];
+./Samples/RoomCapture/ViewController+CaptureSession.mm:	_captureSession.streamingEnabled = TRUE;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    if (!_captureSession)
+./Samples/RoomCapture/ViewController+CaptureSession.mm:        _captureSession = nil;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession = [STCaptureSession newCaptureSession];
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession.lens = STLensNormal;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession.lensDetection = STLensDetectorWarnOnMismatch;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    _captureSession.delegate = self;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:	[_captureSession startMonitoringWithOptions:sensorConfig];
+./Samples/RoomCapture/ViewController+CaptureSession.mm:	_captureSession.streamingEnabled = YES;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:    return _captureSession.sensorMode > STCaptureSessionSensorModeNotConnected;
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession colorCameraDidEnterMode:(STCaptureSessionColorCameraMode)mode
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession sensorDidEnterMode:(STCaptureSessionSensorMode)mode
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession sensorChargerStateChanged:(STCaptureSessionSensorChargerState)chargerState
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didStartAVCaptureSession:(AVCaptureSession*)avCaptureSession
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didStopAVCaptureSession:(AVCaptureSession*)avCaptureSession
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didOutputSample:(NSDictionary*)sample type:(STCaptureSessionSampleType)type
+./Samples/RoomCapture/ViewController+CaptureSession.mm:                        [captureSession resetARSession];
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession onLensDetectorOutput:(STDetectedLensStatus)detectedLensStatus
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSessionWillCreateArSession:(STCaptureSession *)captureSession
+./Samples/RoomCapture/ViewController+CaptureSession.mm:- (void)captureSessionDidCreateArSession:(STCaptureSession *)captureSession
+./Samples/RoomCapture/ViewController+CaptureSession.mm:	[self setupCaptureScene:captureSession];
+./Samples/RoomCapture/ViewController.h:    STCaptureSession* _captureSession;
+./Samples/Viewer/ViewController.mm:    STCaptureSession* _captureSession;
+./Samples/Viewer/ViewController.mm:    _captureSession = [STCaptureSession newCaptureSession];
+./Samples/Viewer/ViewController.mm:    _captureSession.lens = STLensNormal;
+./Samples/Viewer/ViewController.mm:    _captureSession.lensDetection = STLensDetectorOn;
+./Samples/Viewer/ViewController.mm:    _captureSession.delegate = self;
+./Samples/Viewer/ViewController.mm:    [_captureSession startMonitoringWithOptions:sensorConfig];
+./Samples/Viewer/ViewController.mm:    STCaptureSessionUserInstruction userInstructions = _captureSession.userInstructions;
+./Samples/Viewer/ViewController.mm:    if (_captureSession.sensorMode == STCaptureSessionSensorModeWakingUp)
+./Samples/Viewer/ViewController.mm:    return _captureSession.sensorMode >= STCaptureSessionSensorModeNotConnected;
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession sensorDidEnterMode:(STCaptureSessionSensorMode)mode
+./Samples/Viewer/ViewController.mm:            _captureSession.streamingEnabled = NO;
+./Samples/Viewer/ViewController.mm:            _captureSession.streamingEnabled = YES;
+./Samples/Viewer/ViewController.mm:            _captureSession.streamingEnabled = NO;
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession colorCameraDidEnterMode:(STCaptureSessionColorCameraMode)mode
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession sensorChargerStateChanged:(STCaptureSessionSensorChargerState) chargerState
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession didStartAVCaptureSession:(AVCaptureSession *)avCaptureSession
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession didStopAVCaptureSession:(AVCaptureSession *)avCaptureSession
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession didOutputSample:(NSDictionary *)sample type:(STCaptureSessionSampleType)type
+./Samples/Viewer/ViewController.mm:- (void)captureSession:(STCaptureSession *)captureSession onLensDetectorOutput:(STDetectedLensStatus)detectedLensStatus
+./Samples/Scanner/ViewController.mm:        _captureSession.streamingEnabled = YES;
+./Samples/Scanner/ViewController.mm:    _captureSession.streamingEnabled = YES;
+./Samples/Scanner/ViewController.mm:    _captureSession.properties = STCaptureSessionPropertiesSetColorCameraAutoExposureISOAndWhiteBalance();
+./Samples/Scanner/ViewController.mm:    _captureSession.properties = STCaptureSessionPropertiesLockAllColorCameraPropertiesToCurrent();
+./Samples/Scanner/ViewController.mm:    _captureSession.streamingEnabled = NO;
+./Samples/Scanner/ViewController.mm:    _captureSession.streamingEnabled = YES;
+./Samples/Scanner/ViewController.mm:    _captureSession.properties =
+./Samples/Scanner/ViewController.mm://    occString = [occString stringByAppendingString:self->_captureSession.sensorSerialNumber];
+./Samples/Scanner/ViewController.mm://    bool success = [_captureSession.occWriter startWriting:occString appendDateAndExtension:NO];
+./Samples/Scanner/ViewController.mm:    if (_captureSession.occWriter.isWriting)
+./Samples/Scanner/ViewController.mm:        bool success = [_captureSession.occWriter stopWriting];
+./Samples/Scanner/ViewController.mm:    STCaptureSessionUserInstruction userInstructions = _captureSession.userInstructions;
+./Samples/Scanner/ViewController.mm:    // is available use `_captureSession.calibrationType >= STCalibrationTypeApproximate`
+./Samples/Scanner/ViewController.mm:    if (_captureSession.sensorMode == STCaptureSessionSensorModeWakingUp)
+./Samples/Scanner/ViewController.mm:        switch (_captureSession.calibrationType)
+./Samples/Scanner/ViewController.mm:                if (_captureSession.lens == STLensWideVision)
+./Samples/Scanner/ViewController+CaptureSession.mm:    if (_captureSession == nil)
+./Samples/Scanner/ViewController+CaptureSession.mm:        _captureSession = [STCaptureSession newCaptureSession];
+./Samples/Scanner/ViewController+CaptureSession.mm:        //_captureSession = [STCaptureSession newCaptureSessionFromOccFile:@"[AppDocuments]/SN98802_Warm_2020-10-13_13-20-09.occ"];
+./Samples/Scanner/ViewController+CaptureSession.mm:        _captureSession.streamingEnabled = NO;
+./Samples/Scanner/ViewController+CaptureSession.mm:    _captureSession.lens = STLensNormal;
+./Samples/Scanner/ViewController+CaptureSession.mm:    _captureSession.lensDetection = STLensDetectorOff;
+./Samples/Scanner/ViewController+CaptureSession.mm:    _captureSession.delegate = self;
+./Samples/Scanner/ViewController+CaptureSession.mm:    [_captureSession startMonitoringWithOptions:sensorConfig];
+./Samples/Scanner/ViewController+CaptureSession.mm:    return _captureSession.sensorMode > STCaptureSessionSensorModeNotConnected;
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession *)captureSession colorCameraDidEnterMode:(STCaptureSessionColorCameraMode)mode
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession *)captureSession sensorDidEnterMode:(STCaptureSessionSensorMode)mode
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession sensorChargerStateChanged:(STCaptureSessionSensorChargerState)chargerState
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didStartAVCaptureSession:(AVCaptureSession*)avCaptureSession
+./Samples/Scanner/ViewController+CaptureSession.mm:    _captureSession.properties = STCaptureSessionPropertiesSetColorCameraAutoExposureISOAndWhiteBalance();
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didStopAVCaptureSession:(AVCaptureSession*)avCaptureSession
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession didOutputSample:(NSDictionary*)sample type:(STCaptureSessionSampleType)type
+./Samples/Scanner/ViewController+CaptureSession.mm:- (void)captureSession:(STCaptureSession*)captureSession onLensDetectorOutput:(STDetectedLensStatus)detectedLensStatus
+./Samples/Scanner/ViewController.h:    STCaptureSession* _captureSession;
+./Frameworks/opencv2.framework/Versions/A/Headers/videoio/cap_ios.h:@property (nonatomic, strong) AVCaptureSession* captureSession;
+./Frameworks/opencv2.framework/Versions/A/Headers/videoio/cap_ios.h:@property (nonatomic, readonly) BOOL captureSessionLoaded;
+Binary file ./Frameworks/opencv2.framework/Versions/A/opencv2 matches
+./Frameworks/opencv2.framework/Versions/Current/Headers/videoio/cap_ios.h:@property (nonatomic, strong) AVCaptureSession* captureSession;
+./Frameworks/opencv2.framework/Versions/Current/Headers/videoio/cap_ios.h:@property (nonatomic, readonly) BOOL captureSessionLoaded;
+Binary file ./Frameworks/opencv2.framework/Versions/Current/opencv2 matches
+./Frameworks/opencv2.framework/Headers/videoio/cap_ios.h:@property (nonatomic, strong) AVCaptureSession* captureSession;
+./Frameworks/opencv2.framework/Headers/videoio/cap_ios.h:@property (nonatomic, readonly) BOOL captureSessionLoaded;
+Binary file ./Frameworks/opencv2.framework/opencv2 matches
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession sensorDidEnterMode:(STCaptureSessionSensorMode)mode;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession colorCameraDidEnterMode:(STCaptureSessionColorCameraMode)mode;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession sensorChargerStateChanged:(STCaptureSessionSensorChargerState)chargerState;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession didStartAVCaptureSession:(AVCaptureSession *)avCaptureSession;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession didStopAVCaptureSession:(AVCaptureSession *)avCaptureSession;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession didOutputSample:(NSDictionary *)sample type:(STCaptureSessionSampleType)type;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:`_captureSession.lensDetection`. Explicitly:
+./Frameworks/Structure.framework/Headers/STCaptureSession.h: - STLensDetectorOn : This delegate will be notified of the lens it detects, after setting `_captureSession.lens` to that value (if known).
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSession:(STCaptureSession *)captureSession onLensDetectorOutput:(STDetectedLensStatus)detectedLensStatus;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSessionWillCreateArSession:(STCaptureSession *)captureSession;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:@param captureSession The capture session object that signaled the delegate.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:- (void)captureSessionDidCreateArSession:(STCaptureSession *)captureSession
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:When using Apple ARKit, only the captureSessionDidOutputSample delegate will be called if the iOS color camera or CoreMotion is enabled.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:    _captureSession.properties = @{
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:`_captureSession.lens`)
+./Frameworks/Structure.framework/Headers/STCaptureSession.h: - <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]>
+./Frameworks/Structure.framework/Headers/STCaptureSession.h: - <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]>
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:    STCaptureSessionUserInstruction userInstructions = _captureSession.userInstructions;
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:/** Returns the type of the current depth-color calibration for a Structure Sensor and current value of `_captureSession.lens`.
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:    /// Returns an NSDictionary to be set in `_captureSession.properties` that locks
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:    /// Returns an NSDictionary to be set in `_captureSession.properties` that locks
+./Frameworks/Structure.framework/Headers/STCaptureSession.h:    /// Returns an NSDictionary to be set in `_captureSession.properties` that sets
+./Frameworks/Structure.framework/Headers/STOccFileWriter.h:however the following interface is exposed when calling `captureSession.occWriter`.
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:// Can be set via _captureSession.properties
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:// Can be set via _captureSession.properties
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:// passed to [STCaptureSessionDelegate captureSession:didOutputSample:type:]
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h: - <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]>
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:    While off, the lens detector will not operate, and <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]> will not trigger.
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:    lens events to <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]>.
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:    lens events to <[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]>.
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:/// Indicates the type of sample output by the capture session and sent to <[STCaptureSessionDelegate captureSession:didOutputSample:type]>
+./Frameworks/Structure.framework/Headers/STCaptureSession+Types.h:    bool needToConnectSensor = _captureSession.userInstructions & STCaptureSessionUserInstructionNeedToConnectSensor;
+Binary file ./Frameworks/Structure.framework/Structure matches
+./Reference/html/Classes/STOccFileWriter.html:however the following interface is exposed when calling <code>captureSession.occWriter</code>.</p>
+./Reference/html/Classes/STCaptureSession.html:<p>When using Apple ARKit, only the captureSessionDidOutputSample <a href="#//api/name/delegate">delegate</a> will be called if the iOS color camera or CoreMotion is enabled.
+./Reference/html/Classes/STCaptureSession.html:<pre><code>_captureSession.properties = @{
+./Reference/html/Classes/STCaptureSession.html:<code>_captureSession.</code>lens<code></code>)</p>
+./Reference/html/Classes/STCaptureSession.html:<li><a href="../Protocols/STCaptureSessionDelegate.html#//api/name/captureSession:onLensDetectorOutput:">[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]</a></li>
+./Reference/html/Classes/STCaptureSession.html:<li><a href="../Protocols/STCaptureSessionDelegate.html#//api/name/captureSession:onLensDetectorOutput:">[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]</a></li>
+./Reference/html/Classes/STCaptureSession.html:<pre><code>STCaptureSessionUserInstruction userInstructions = _captureSession.userInstructions;
+./Reference/html/Classes/STCaptureSession.html:				<p>Returns the type of the current depth-color calibration for a Structure Sensor and current value of <code>_captureSession.</code>lens<code></code>.</p>
+./Reference/html/Constants/STCaptureSessionUserInstruction.html:<pre><code>bool needToConnectSensor = _captureSession.userInstructions &amp; STCaptureSessionUserInstructionNeedToConnectSensor;
+./Reference/html/Constants/STLensDetectorState.html:<li><a href="../Protocols/STCaptureSessionDelegate.html#//api/name/captureSession:onLensDetectorOutput:">[STCaptureSessionDelegate captureSession:onLensDetectorOutput:]</a></li>
+./Reference/html/Constants/STCaptureSessionSampleType.html:                        <p>Indicates the type of sample output by the capture session and sent to [STCaptureSessionDelegate captureSession:didOutputSample:type]</p>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:sensorDidEnterMode:">- captureSession:sensorDidEnterMode:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:colorCameraDidEnterMode:">- captureSession:colorCameraDidEnterMode:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:sensorChargerStateChanged:">- captureSession:sensorChargerStateChanged:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:didStartAVCaptureSession:">- captureSession:didStartAVCaptureSession:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:didStopAVCaptureSession:">- captureSession:didStopAVCaptureSession:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:didOutputSample:type:">- captureSession:didOutputSample:type:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSession:onLensDetectorOutput:">- captureSession:onLensDetectorOutput:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSessionWillCreateArSession:">- captureSessionWillCreateArSession:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:		<option value="//api/name/captureSessionDidCreateArSession:withARSCNView:">- captureSessionDidCreateArSession:withARSCNView:</option>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:sensorDidEnterMode:" title="captureSession:sensorDidEnterMode:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:sensorDidEnterMode:">&ndash;&nbsp;captureSession:sensorDidEnterMode:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> sensorDidEnterMode:(STCaptureSessionSensorMode)<em>mode</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:colorCameraDidEnterMode:" title="captureSession:colorCameraDidEnterMode:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:colorCameraDidEnterMode:">&ndash;&nbsp;captureSession:colorCameraDidEnterMode:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> colorCameraDidEnterMode:(STCaptureSessionColorCameraMode)<em>mode</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:sensorChargerStateChanged:" title="captureSession:sensorChargerStateChanged:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:sensorChargerStateChanged:">&ndash;&nbsp;captureSession:sensorChargerStateChanged:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> sensorChargerStateChanged:(STCaptureSessionSensorChargerState)<em>chargerState</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:didStartAVCaptureSession:" title="captureSession:didStartAVCaptureSession:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:didStartAVCaptureSession:">&ndash;&nbsp;captureSession:didStartAVCaptureSession:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> didStartAVCaptureSession:(AVCaptureSession *)<em>avCaptureSession</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:didStopAVCaptureSession:" title="captureSession:didStopAVCaptureSession:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:didStopAVCaptureSession:">&ndash;&nbsp;captureSession:didStopAVCaptureSession:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> didStopAVCaptureSession:(AVCaptureSession *)<em>avCaptureSession</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:didOutputSample:type:" title="captureSession:didOutputSample:type:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:didOutputSample:type:">&ndash;&nbsp;captureSession:didOutputSample:type:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> didOutputSample:(NSDictionary *)<em>sample</em> type:(STCaptureSessionSampleType)<em>type</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSession:onLensDetectorOutput:" title="captureSession:onLensDetectorOutput:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSession:onLensDetectorOutput:">&ndash;&nbsp;captureSession:onLensDetectorOutput:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSession:(STCaptureSession *)<em>captureSession</em> onLensDetectorOutput:(STDetectedLensStatus)<em>detectedLensStatus</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:<code>_captureSession.lensDetection</code>. Explicitly:</p>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:<li>STLensDetectorOn : This delegate will be notified of the lens it detects, after setting <code>_captureSession.lens</code> to that value (if known).</li>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSessionWillCreateArSession:" title="captureSessionWillCreateArSession:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSessionWillCreateArSession:">&ndash;&nbsp;captureSessionWillCreateArSession:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSessionWillCreateArSession:(STCaptureSession *)<em>captureSession</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<a name="//api/name/captureSessionDidCreateArSession:withARSCNView:" title="captureSessionDidCreateArSession:withARSCNView:"></a>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:	<h3 class="method-title"><code><a href="#//api/name/captureSessionDidCreateArSession:withARSCNView:">&ndash;&nbsp;captureSessionDidCreateArSession:withARSCNView:</a></code>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:			<div class="method-subsection method-declaration"><code>- (void)captureSessionDidCreateArSession:(STCaptureSession *)<em>captureSession</em> withARSCNView:(ARSCNView *)<em>arScnView</em></code></div>
+./Reference/html/Protocols/STCaptureSessionDelegate.html:						<th scope="row" class="argument-name"><code>captureSession</code></th>
