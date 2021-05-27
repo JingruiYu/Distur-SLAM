@@ -42,7 +42,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     cv::imshow("corners", img_show);
     cv::waitKey(30);
 
-    cv::Mat Twc = poseSolver::PnP3Dwith2D(kpts1_kpts2);
+    cv::Mat Twc = poseSolver::ICP2D(kpts1_kpts2);
 
     curFrame->setTwc(Twc);
     mpMap->addFrame(curFrame);

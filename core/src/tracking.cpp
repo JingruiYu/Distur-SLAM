@@ -1,6 +1,6 @@
 /*************************************************************************
 	> File Name: src/tracking.cpp
-	> Author: 
+	> Author: yujr
 	> Mail: 
 	> Created Time: 2021年05月19日 星期三 16时14分16秒
  ************************************************************************/
@@ -19,18 +19,16 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::LK(Fram
 {
 	const std::vector<cv::Mat> &im1 = refFrame->img_pyr;
     const std::vector<cv::Mat> &im2 = curFrame->img_pyr;
-	int rows = im1[0].rows;
-    int cols = im2[0].cols;
+	int rows = curFrame->rows;
+    int cols = curFrame->cols;
+	// std::cout << "curFrame->rows : " << curFrame->rows << ", rows: " << rows << std::endl;
 
-	std::vector<cv::Point2f> kpts1;
-	cv::goodFeaturesToTrack(im1[0],kpts1,100,0.01,5.0);
-
-	if (kpts1.size() < 20)
+	if (!curFrame->extractFastPoint())
 	{
-		std::cout << "in LK, kpts1.size() < 20" << std::endl;
 		return std::make_pair(std::vector<cv::Point2f>(), std::vector<cv::Point2f>());
 	}
-	
+
+	std::vector<cv::Point2f> kpts1 = curFrame->vPoint2fs;
 	std::vector<uchar> status1;
 	std::vector<float> errs1;
 	std::vector<cv::Point2f> kpts2;
