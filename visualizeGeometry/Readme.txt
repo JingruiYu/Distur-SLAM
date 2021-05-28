@@ -31,3 +31,5 @@ Note that in this program the original X axis is right (red line), Y is up (gree
 * I found that in virtual machines there may be an error in pangolin, which was solved in its issue: https://github.com/stevenlovegrove/Pangolin/issues/74 . You need to comment the two lines mentioned by paulinus, and the recompile and reinstall Pangolin, if you happen to find this problem. 
 
 If you still have problems using this program, please contact: gaoxiang12@mails.tsinghua.edu.cn
+
+4. this is used for pangolin visualization
