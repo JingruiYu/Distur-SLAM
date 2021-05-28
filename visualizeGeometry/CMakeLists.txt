@@ -16,5 +16,5 @@ target_link_libraries( visualizeGeometry ${Pangolin_LIBRARIES} )
 add_executable( testVisual testVisual.cpp )
 target_link_libraries( testVisual ${Pangolin_LIBRARIES} )
 
-add_executable( testFitLine testFitLine.cpp )
-target_link_libraries( testFitLine ${Pangolin_LIBRARIES} )
+# add_executable( testFitLine testFitLine.cpp )
+# target_link_libraries( testFitLine ${Pangolin_LIBRARIES} )

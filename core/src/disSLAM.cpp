@@ -10,7 +10,13 @@
 disSLAM::disSLAM(/* args */)
 {
     mpMap = new map();
+
+    view::viewerConfig vfg;
+    mpViewer = new view("viewer",vfg);
     std::cout << "hello disSLAM " << std::endl;
+
+    viewer_thread = std::thread(&view::run,mpViewer);
+    // mpViewer->run();
 }
 
 disSLAM::~disSLAM()
@@ -22,7 +28,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     curFrame = new Frame(_idx, _img, _timestamp);
     if (!lastFrame)
     {
-        cv::Mat Twc = cv::Mat::eye(4,4,CV_32FC1);
+        cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
         curFrame->setTwc(Twc);
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
@@ -39,11 +45,11 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     {
         cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
     }
-    cv::imshow("corners", img_show);
-    cv::waitKey(30);
+    // cv::imshow("corners", img_show);
+    // cv::waitKey(30);
 
-    cv::Mat Twc = poseSolver::ICP2D(kpts1_kpts2);
-
+    cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
+    cv::Mat Twc = lastFrame->Twc * Tc1c2;
     curFrame->setTwc(Twc);
     mpMap->addFrame(curFrame);
 

@@ -12,9 +12,10 @@
 #include "Frame.h"
 #include "tracking.h"
 #include "poseSolver.h"
-
+#include "view.h"
 
 #include <opencv2/opencv.hpp>
+#include <thread>
 #include <iostream>
 
 class disSLAM
@@ -28,7 +29,9 @@ public:
 public:
     Frame *curFrame  = nullptr;
     Frame *lastFrame = nullptr;
-
+    view *mpViewer = nullptr;
     map *mpMap = nullptr;
+
+    std::thread viewer_thread;
 };
 

@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb", //安装codelldb
+            "request": "launch",
+            "name": "Debug",
+            "program": "./build/main",  // 该文件夹下的该文件
+            "args": ["./data/downshort/"],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build with Clang"
+        }
+    ]
+  }

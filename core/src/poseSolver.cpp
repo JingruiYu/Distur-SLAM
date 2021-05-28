@@ -42,8 +42,7 @@ cv::Point2f poseSolver::birdCamera2Pixel(cv::Point3f p)
 
 cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > &kpts1_kpts2)
 {
-	
-	cv::Mat Tcc = cv::Mat::eye(3,3,CV_32F);
+	cv::Mat Tc1c2 = cv::Mat::eye(3,3,CV_32F);
 	// poseSolver::FindRtICP2D();
 	std::vector<cv::Point2f> vKeys1 = kpts1_kpts2.first;
 	std::vector<cv::Point2f> vKeys2 = kpts1_kpts2.second;
@@ -61,14 +60,14 @@ cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Po
 	// std::cout << "vKeys1.size(): " << vKeys1.size() << " - " << "vKeys2.size(): " << vKeys2.size() << std::endl;
 	// std::cout << "vMatches.size(): " << vMatches.size() << " - " << "vbMatchesInliers.size(): " << vbMatchesInliers.size() << std::endl;
 
-	cv::Mat R,t;
-	poseSolver::FindRtICP2D(vKeys1, vKeys2, vMatches, vbMatchesInliers, R, t, 0.03984, 200);
+	cv::Mat Rc1c2,tc1c2;
+	poseSolver::FindRtICP2D(vKeys1, vKeys2, vMatches, vbMatchesInliers, Rc1c2, tc1c2, 0.03984, 200);
 	
-	R.copyTo(Tcc.rowRange(0,2).colRange(0,2));
-	t.copyTo(Tcc.rowRange(0,2).col(2));
+	Rc1c2.copyTo(Tc1c2.rowRange(0,2).colRange(0,2));
+	tc1c2.copyTo(Tc1c2.rowRange(0,2).col(2));
 	// std::cout << "R: " << std::endl << R << std::endl << " t: " << t.t() << std::endl << "Tcc:" << std::endl << Tcc << std::endl;
 
-	return Tcc;
+	return Tc1c2;
 }
 
 int poseSolver::FindRtICP2D(const std::vector<cv::Point2f> &vKeysXY1, const std::vector<cv::Point2f> &vKeysXY2, const std::vector<cv::DMatch> &vMatches,
