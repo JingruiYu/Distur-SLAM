@@ -15,8 +15,8 @@ public:
 	poseSolver();
 	~poseSolver();
 
-	static cv::Point3f birdPixel2Camera(cv::Point2f pt);
-	static cv::Point2f birdCamera2Pixel(cv::Point3f pt);
+	static cv::Point2f birdPixel2Camera(cv::Point2f pt);
+	static cv::Point2f birdCamera2Pixel(cv::Point2f pt);
 
 	static cv::Mat ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > &kpts1_kpts2);
 	static int FindRtICP2D(const std::vector<cv::Point2f> &vKeysXY1, const std::vector<cv::Point2f> &vKeysXY2, const std::vector<cv::DMatch> &vMatches,

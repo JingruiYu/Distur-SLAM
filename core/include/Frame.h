@@ -15,7 +15,7 @@
 class Frame
 {
 public:
-	Frame(int _idx, cv::Mat &_img, double _timestamp);
+	Frame(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose);
 	~Frame();
 
 	bool extractFastPoint();
@@ -28,7 +28,8 @@ public:
 	
 	SE2 se2Twc;
 	cv::Mat Twc;
-	
+	SE2 mGtPose;
+
 	struct bpoint
 	{
 	public:

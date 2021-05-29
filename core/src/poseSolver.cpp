@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include "poseSolver.h"
+#include "Frame.h"
 
 const float poseSolver::bRow = 384.0;
 const float poseSolver::bCol = 384.0;
@@ -22,17 +23,16 @@ poseSolver::~poseSolver()
 {
 }
 
-cv::Point3f poseSolver::birdPixel2Camera(cv::Point2f pt)
+cv::Point2f poseSolver::birdPixel2Camera(cv::Point2f pt)
 {
-	cv::Point3f p;
+	cv::Point2f p;
     p.x = (bRow/2-pt.y)*p2m+rear;
     p.y = (bCol/2-pt.x)*p2m;
-    p.z = 0;
 
     return p;
 }
 
-cv::Point2f poseSolver::birdCamera2Pixel(cv::Point3f p)
+cv::Point2f poseSolver::birdCamera2Pixel(cv::Point2f p)
 {
 	cv::Point2f pt;
     pt.x = bCol/2-p.y*m2p;
@@ -47,12 +47,29 @@ cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Po
 	std::vector<cv::Point2f> vKeys1 = kpts1_kpts2.first;
 	std::vector<cv::Point2f> vKeys2 = kpts1_kpts2.second;
 	std::vector<cv::DMatch> vMatches;
+    std::vector<cv::Point2f> vBpoint1, vBpoint2;
+
 	for (size_t i = 0; i < vKeys1.size(); i++)
 	{
 		cv::DMatch imatch;
 		imatch.queryIdx = i;
 		imatch.trainIdx = i;
 		vMatches.push_back(imatch);
+
+        cv::Point2f p1 = vKeys1[i];
+        cv::Point2f p2 = vKeys2[i];
+
+        // Frame::bpoint bp1(p1.x,p1.y,bRow,bCol);
+        // Frame::bpoint bp2(p2.x,p2.y,bRow,bCol);
+
+        // cv::Point2f xyp1(bp1.X,bp1.Y);
+        // cv::Point2f xyp2(bp2.X,bp2.Y);
+
+        cv::Point2f xyp11 = birdPixel2Camera(p1);
+        cv::Point2f xyp22 = birdPixel2Camera(p2);
+
+        vBpoint1.push_back(xyp11);
+        vBpoint2.push_back(xyp22);
 	}
 	std::vector<bool> vbMatchesInliers(vMatches.size(),false);
 
@@ -61,7 +78,7 @@ cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Po
 	// std::cout << "vMatches.size(): " << vMatches.size() << " - " << "vbMatchesInliers.size(): " << vbMatchesInliers.size() << std::endl;
 
 	cv::Mat Rc1c2,tc1c2;
-	poseSolver::FindRtICP2D(vKeys1, vKeys2, vMatches, vbMatchesInliers, Rc1c2, tc1c2, 0.03984, 200);
+	poseSolver::FindRtICP2D(vBpoint1, vBpoint2, vMatches, vbMatchesInliers, Rc1c2, tc1c2, 0.03984, 200);
 	
 	Rc1c2.copyTo(Tc1c2.rowRange(0,2).colRange(0,2));
 	tc1c2.copyTo(Tc1c2.rowRange(0,2).col(2));

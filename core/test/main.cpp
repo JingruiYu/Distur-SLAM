@@ -23,8 +23,9 @@ int main(int argc, char const *argv[])
 	{
 		cv::Mat bird = cv::imread(std::string(argv[1])+"/"+vBird[i], CV_LOAD_IMAGE_UNCHANGED);
 		double tframe = vTimestamps[i];
+		cv::Vec3d gtPose = vgtPose[i];
 
-		mSLAM->TrackwithOF(i,bird,tframe);
+		mSLAM->TrackwithOF(i,bird,tframe,gtPose);
 	}
 	
 	

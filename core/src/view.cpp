@@ -162,7 +162,8 @@ void view::DrawKeyFrame()
     for(auto pKF:vkeyFrameAll)
     {
         // std::cout << "pKF: " << pKF->idx << std::endl;
-        Eigen::Matrix4d Twc = convert::toMatrix4d(pKF->Twc);
+        // Eigen::Matrix4d Twc = convert::toMatrix4d(pKF->Twc);
+        Eigen::Matrix4d Twc = pKF->mGtPose.toMatrix4d();
 
         glPushMatrix();
         glMultMatrixd(Twc.data());

@@ -7,10 +7,12 @@
 
 #include "Frame.h"
 
-Frame::Frame(int _idx, cv::Mat &_img, double _timestamp)
+Frame::Frame(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose)
 {
     idx = _idx;
     timestamp = _timestamp;
+
+    mGtPose = SE2(_gtPose[0], _gtPose[1], _gtPose[2]);
 
     rows = _img.rows;
     cols = _img.cols;

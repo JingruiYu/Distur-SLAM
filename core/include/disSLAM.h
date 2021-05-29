@@ -24,7 +24,7 @@ public:
     disSLAM(/* args */);
     ~disSLAM();
 
-    void TrackwithOF(int _idx, cv::Mat &_img, double _timestamp);
+    void TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d gtPose);
 
 public:
     Frame *curFrame  = nullptr;

@@ -24,9 +24,9 @@ disSLAM::~disSLAM()
 {
 }
 
-void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
+void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose)
 {
-    curFrame = new Frame(_idx, _img, _timestamp);
+    curFrame = new Frame(_idx, _img, _timestamp, _gtPose);
     if (!lastFrame)
     {
         cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
