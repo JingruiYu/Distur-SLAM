@@ -45,4 +45,6 @@ bool readData::LoadSAICData(const std::string &strFile, std::vector<std::string>
             vstrBirdviewContourICPFilenames.push_back("contourICP/"+image+".jpg");
         }
     }
+
+    return true;
 }

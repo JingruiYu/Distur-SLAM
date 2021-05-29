@@ -4,3 +4,5 @@ core/.vscode/settings.json
 core/examples/
 visualizeGeometry/.vscode/settings.json
 visualizeGeometry/build/
+core/.vscode/launch.json
+core/.vscode/tasks.json

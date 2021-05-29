@@ -19,11 +19,12 @@ public:
     ~view();
 
     void run();
+    void runcore(int num);
     void createWindow();
 
     void getCameraMatriux(pangolin::OpenGlMatrix &M);
     void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
-    void DrawKeyFrames();
+    void DrawKeyFrames(int num);
     
 public:
     std::string mWindowName;

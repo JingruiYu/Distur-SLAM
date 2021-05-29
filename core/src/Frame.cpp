@@ -59,4 +59,10 @@ bool Frame::extractFastPoint()
 void Frame::setTwc(cv::Mat &_Twc)
 {
     Twc = _Twc.clone();
+    se2Twc = convert::toSE2(Twc);
+    std::cout << "orignial Twc is: " << std::endl << Twc << std::endl;
+    std::cout << "se2Twc.x: " << se2Twc.x << " se2Twc.y: " << se2Twc.y << " se2Twc.theta: " << se2Twc.theta << std::endl;
+    
+    Eigen::Matrix4d eT = convert::toMatrix4d(se2Twc);
+    std::cout << "eigen mat is: " << std::endl << eT << std::endl;
 }

@@ -14,8 +14,8 @@ disSLAM::disSLAM(/* args */)
     view::viewerConfig vfg;
     mpViewer = new view("viewer",vfg);
     std::cout << "hello disSLAM " << std::endl;
-
-    viewer_thread = std::thread(&view::run,mpViewer);
+    mpViewer->createWindow();
+    // viewer_thread = std::thread(&view::run,mpViewer);
     // mpViewer->run();
 }
 
@@ -52,6 +52,8 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     cv::Mat Twc = lastFrame->Twc * Tc1c2;
     curFrame->setTwc(Twc);
     mpMap->addFrame(curFrame);
+
+    mpViewer->runcore(_idx);
 
     lastFrame = curFrame;
     return;

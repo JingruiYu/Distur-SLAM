@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "SE2.h"
+#include "convert.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
@@ -23,7 +25,8 @@ public:
 	cv::Mat img;
 	cv::Mat img_gray;
 	std::vector<cv::Mat> img_pyr;
-
+	
+	SE2 se2Twc;
 	cv::Mat Twc;
 	
 	struct bpoint

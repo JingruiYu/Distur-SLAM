@@ -44,7 +44,7 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::LK(Fram
 		for (size_t i = 0; i < kpts1.size(); i++)
 		{
 			cv::Point2f pt1 = kpts1[i];
-			cv::Point2f pt2 = kpts2[i];
+			// cv::Point2f pt2 = kpts2[i];
 			cv::Point2f pt11 = kpts11[i];
 
 			if (!status2[i] || cv::norm(pt11-pt1) > 3.0)

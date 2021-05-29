@@ -4,7 +4,7 @@ project(Distur)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
 find_package(OpenCV QUIET)
-# find_package(Eigen3 REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 # include_directories( "/usr/include/eigen3" )
 
@@ -24,11 +24,13 @@ add_library(${PROJECT_NAME}
     src/map.cpp
     src/poseSolver.cpp
     src/view.cpp
+    src/convert.cpp
+    src/SE2.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
-# ${EIGEN3_LIBS}
+${EIGEN3_LIBS}
 pangolin
 )
 
