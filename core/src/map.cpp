@@ -19,3 +19,20 @@ void map::addFrame(Frame* pF)
 {
 	vFrame.push_back(pF);
 }
+
+void map::addkeyFrame(Frame* pF)
+{
+	keyFrame* pKF = new keyFrame(*pF);
+
+	vkeyFrame.push_back(pKF);
+}
+
+void map::addkeyFrame(keyFrame* pKF)
+{
+	vkeyFrame.push_back(pKF);
+}
+
+std::vector<keyFrame*> map::getKeyFrameAll()
+{
+	return std::vector<keyFrame*>(vkeyFrame.begin(),vkeyFrame.end());
+}

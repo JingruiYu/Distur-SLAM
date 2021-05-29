@@ -1,5 +1,7 @@
 #pragma once
 
+#include "map.h"
+
 #include <pangolin/pangolin.h>
 #include <iostream>
 
@@ -9,13 +11,17 @@ public:
     struct viewerConfig
     {
         viewerConfig(): windowWidth(1000), windowHeight(600),
-        ViewPointX(0.0), ViewPointY(-0.7), ViewPointZ(-1.8), ViewPointF(500)
+                        ViewPointX(0.0), ViewPointY(-0.7), 
+                        ViewPointZ(-1.8), ViewPointF(500),
+                        KeyFrameSize(0.05), KeyFrameLineWidth(1),
+                        GraphLineWidth(0.9)
         {}
         int windowWidth, windowHeight;
         double ViewPointX, ViewPointY, ViewPointZ, ViewPointF;
+        double KeyFrameSize, KeyFrameLineWidth, GraphLineWidth;
     };
     
-    view(const std::string& _windowName, const viewerConfig& _vfg);
+    view(const std::string& _windowName, const viewerConfig& _vfg, map* _mpMap);
     ~view();
 
     void run();
@@ -23,10 +29,14 @@ public:
     void createWindow();
 
     void getCameraMatriux(pangolin::OpenGlMatrix &M);
+    void DrawTest(int num);
     void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
-    void DrawKeyFrames(int num);
+    void DrawKeyFrame();
     
 public:
+
+    map* mpMap;
+
     std::string mWindowName;
     viewerConfig mvfg;
 

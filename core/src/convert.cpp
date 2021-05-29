@@ -42,6 +42,17 @@ Eigen::Matrix4d convert::toMatrix4d(const SE2 &se2T)
             s, c, 0, se2T.y,
             0, 0, 1, 0,
             0, 0, 0, 1;
+
+    return mat;
+}
+
+Eigen::Matrix4d convert::toMatrix4d(const cv::Mat &cvT)
+{
+    Eigen::Matrix4d mat;
+    mat <<  cvT.at<float>(0,0),cvT.at<float>(0,1), 0, cvT.at<float>(0,2),
+            cvT.at<float>(1,0),cvT.at<float>(1,1), 0, cvT.at<float>(1,2),
+            0, 0, 1, 0,
+            0, 0, 0, 1;
 			
     return mat;
 }

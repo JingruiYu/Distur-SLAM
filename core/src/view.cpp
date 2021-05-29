@@ -1,7 +1,7 @@
 #include "view.h"
 
-view::view(const std::string& _windowName, const viewerConfig& _vfg) :
-            mWindowName(_windowName), mvfg(_vfg), ms_cam(nullptr), md_cam(nullptr)
+view::view(const std::string& _windowName, const viewerConfig& _vfg, map* _mpMap) :
+           mpMap(_mpMap), mWindowName(_windowName), mvfg(_vfg), ms_cam(nullptr), md_cam(nullptr)
 {
 }
 
@@ -25,13 +25,13 @@ void view::runcore(int num)
     pangolin::OpenGlMatrix Twc;
     Twc.SetIdentity();
     Twc(0,3) = num*0.1;
-    // getCameraMatriux(Twc);
-    // ms_cam->Follow(Twc);
     md_cam->Activate(*ms_cam );
     glClearColor(1.0f,1.0f,1.0f,1.0f);
-    DrawCurrentCamera(Twc);
-
-    DrawKeyFrames(num);
+    // getCameraMatriux(Twc);
+    // ms_cam->Follow(Twc);
+    // DrawCurrentCamera(Twc);
+    // DrawTest(num);
+    DrawKeyFrame();
 
     pangolin::FinishFrame();
 }
@@ -104,7 +104,7 @@ void view::DrawCurrentCamera(pangolin::OpenGlMatrix &Twc)
     glPopMatrix();
 }
 
-void view::DrawKeyFrames(int num)
+void view::DrawTest(int num)
 {
     const float w = 0.05;
     const float h = w*0.75;
@@ -148,4 +148,54 @@ void view::DrawKeyFrames(int num)
 
         glPopMatrix();
     }
+}
+
+void view::DrawKeyFrame()
+{
+    std::vector<keyFrame*> vkeyFrameAll = mpMap->getKeyFrameAll();
+    // std::cout << "vkeyFrameAll.size() : " << vkeyFrameAll.size() << std::endl;
+
+    const float &w = mvfg.KeyFrameSize;
+    const float h = w*0.75;
+    const float z = w*0.6;
+
+    for(auto pKF:vkeyFrameAll)
+    {
+        // std::cout << "pKF: " << pKF->idx << std::endl;
+        Eigen::Matrix4d Twc = convert::toMatrix4d(pKF->Twc);
+
+        glPushMatrix();
+        glMultMatrixd(Twc.data());
+
+        glLineWidth(mvfg.KeyFrameLineWidth);
+        glColor3f(0.0f,0.0f,1.0f);
+        glBegin(GL_LINES);
+
+        glVertex3f(0,0,0); glVertex3f(w,h,z);
+        glVertex3f(0,0,0); glVertex3f(w,-h,z);
+        glVertex3f(0,0,0); glVertex3f(-w,-h,z);
+        glVertex3f(0,0,0); glVertex3f(-w,h,z);
+
+        glVertex3f(w,h,z); glVertex3f(w,-h,z);
+        glVertex3f(-w,h,z); glVertex3f(-w,-h,z);
+        glVertex3f(-w,h,z); glVertex3f(w,h,z);
+        glVertex3f(-w,-h,z); glVertex3f(w,-h,z);
+
+        glEnd();
+
+        glPopMatrix();
+    }
+
+    // Draw graph
+    glLineWidth(mvfg.GraphLineWidth);
+    glColor3f(0.0f,1.0f,0.0f);
+    glBegin(GL_LINES);
+    for(size_t i = 1; i < vkeyFrameAll.size(); i++)
+    {
+        Eigen::Vector3d begin = convert::toMatrix4d(vkeyFrameAll[i-1]->Twc).topRightCorner(3, 1);
+        Eigen::Vector3d end = convert::toMatrix4d(vkeyFrameAll[i]->Twc).topRightCorner(3, 1);
+        glVertex3f(begin[0], begin[1], begin[2]);
+        glVertex3f(end[0], end[1], end[2]);
+    }
+    glEnd();
 }

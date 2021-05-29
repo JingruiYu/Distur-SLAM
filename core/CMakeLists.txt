@@ -26,6 +26,7 @@ add_library(${PROJECT_NAME}
     src/view.cpp
     src/convert.cpp
     src/SE2.cpp
+    src/keyFrame.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

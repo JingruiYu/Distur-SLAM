@@ -60,9 +60,16 @@ void Frame::setTwc(cv::Mat &_Twc)
 {
     Twc = _Twc.clone();
     se2Twc = convert::toSE2(Twc);
-    std::cout << "orignial Twc is: " << std::endl << Twc << std::endl;
-    std::cout << "se2Twc.x: " << se2Twc.x << " se2Twc.y: " << se2Twc.y << " se2Twc.theta: " << se2Twc.theta << std::endl;
     
-    Eigen::Matrix4d eT = convert::toMatrix4d(se2Twc);
-    std::cout << "eigen mat is: " << std::endl << eT << std::endl;
+    // SE2 tmp = SE2(Twc);
+    // std::cout << "orignial Twc is: " << std::endl << Twc << std::endl;
+    // std::cout << "se2Twc.x: " << se2Twc.x << " se2Twc.y: " << se2Twc.y << " se2Twc.theta: " << se2Twc.theta << std::endl;
+    // std::cout << "tmp.x: " << tmp.x << " tmp.y: " << tmp.y << " tmp.theta: " << tmp.theta << std::endl;
+    
+    // Eigen::Matrix4d eT = convert::toMatrix4d(se2Twc);
+    // Eigen::Matrix4d dT = convert::toMatrix4d(Twc);
+    // Eigen::Matrix4d mT = tmp.toMatrix4d();
+    // std::cout << "eigen mat is: " << std::endl << eT << std::endl;
+    // std::cout << "eigen mat is: " << std::endl << dT << std::endl;
+    // std::cout << "eigen mat is: " << std::endl << mT << std::endl;
 }

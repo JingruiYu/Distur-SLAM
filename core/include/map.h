@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "keyFrame.h"
 #include "Frame.h"
 
 class map
@@ -14,9 +15,15 @@ class map
 public:
 	map();
 	~map();
-	void addFrame(Frame* pF);
 
+	void addFrame(Frame* pF);
+	void addkeyFrame(Frame* pF);
+	void addkeyFrame(keyFrame* pKF);
+
+	std::vector<keyFrame*> getKeyFrameAll();
+	
 public:
 	std::vector<Frame*> vFrame;
+	std::vector<keyFrame*> vkeyFrame;
 };
 

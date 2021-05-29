@@ -6,13 +6,14 @@
  ************************************************************************/
 
 #include "disSLAM.h"
+#include "keyFrame.h"
 
 disSLAM::disSLAM(/* args */)
 {
     mpMap = new map();
 
     view::viewerConfig vfg;
-    mpViewer = new view("viewer",vfg);
+    mpViewer = new view("viewer",vfg,mpMap);
     std::cout << "hello disSLAM " << std::endl;
     mpViewer->createWindow();
     // viewer_thread = std::thread(&view::run,mpViewer);
@@ -51,8 +52,12 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp)
     cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
     cv::Mat Twc = lastFrame->Twc * Tc1c2;
     curFrame->setTwc(Twc);
-    mpMap->addFrame(curFrame);
 
+    // keyFrame* curKF = new keyFrame(*curFrame);
+    // std::cout << "curKF: " << curKF->mnId << std::endl;
+    // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
+
+    mpMap->addkeyFrame(curFrame);
     mpViewer->runcore(_idx);
 
     lastFrame = curFrame;
