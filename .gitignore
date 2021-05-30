@@ -5,7 +5,6 @@ core/examples/
 visualizeGeometry/.vscode/settings.json
 visualizeGeometry/build/
 core/.vscode/
-testdata/saic/
 photometric/DirectBA/0301DirectG2oBA/*.png
 photometric/DirectBA/.vscode/settings.json
 core/.vscode/launch.json
