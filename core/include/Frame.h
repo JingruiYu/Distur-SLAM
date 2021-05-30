@@ -20,6 +20,7 @@ public:
 
 	bool extractFastPoint();
 	void setTwc(cv::Mat &Twc);
+	bool setMappoints(std::vector<cv::Point2f>& _vPoints);
 	
 public:
 	cv::Mat img;
@@ -40,6 +41,7 @@ public:
 		float X,Y;
 		float pa,pb;
 
+		bpoint(){}
 		bpoint(float _ou, float _ov, float _rows, float _cols) : ou(_ou), ov(_ov) 
 		{
 			v = _rows * 0.5 - ov;

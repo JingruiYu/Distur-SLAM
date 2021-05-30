@@ -75,3 +75,18 @@ void Frame::setTwc(cv::Mat &_Twc)
     // std::cout << "eigen mat is: " << std::endl << dT << std::endl;
     // std::cout << "eigen mat is: " << std::endl << mT << std::endl;
 }
+
+bool Frame::setMappoints(std::vector<cv::Point2f>& _vPoints)
+{
+    vPoint2fs.clear();
+    vbPoints.clear();
+
+    for (auto p:_vPoints)
+    {
+        bpoint bp(p.x,p.y,rows,cols);
+        vbPoints.push_back(bp);
+        vPoint2fs.push_back(p);
+    }
+
+    return true;
+}

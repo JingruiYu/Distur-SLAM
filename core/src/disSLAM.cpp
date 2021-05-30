@@ -7,6 +7,7 @@
 
 #include "disSLAM.h"
 #include "keyFrame.h"
+#include "optimizer.h"
 
 disSLAM::disSLAM(/* args */)
 {
@@ -42,6 +43,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d 
 
     cv::Mat img_show = _img.clone();
     std::vector<cv::Point2f> curKeyPt = kpts1_kpts2.second;
+    curFrame->setMappoints(curKeyPt);
     for(auto kp:curKeyPt)
     {
         cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
@@ -50,6 +52,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d 
     // cv::waitKey(30);
 
     cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
+    optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
     cv::Mat Twc = lastFrame->Twc * Tc1c2;
     curFrame->setTwc(Twc);
 

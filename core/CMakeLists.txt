@@ -9,11 +9,13 @@ find_package(Eigen3 REQUIRED)
 # include_directories( "/usr/include/eigen3" )
 
 find_package(Pangolin REQUIRED)
+find_package(Ceres REQUIRED)
 
 include_directories(
     include
     ${OPENCV_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}
+    ${CERES_INCLUDE_DIRS} 
 )
 
 add_library(${PROJECT_NAME}
@@ -27,12 +29,14 @@ add_library(${PROJECT_NAME}
     src/convert.cpp
     src/SE2.cpp
     src/keyFrame.cpp
+    src/optimizer.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 pangolin
+${CERES_LIBRARIES}
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)

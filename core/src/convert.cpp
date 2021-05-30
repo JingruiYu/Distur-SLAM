@@ -32,6 +32,23 @@ SE2 convert::toSE2(const cv::Mat &cvT)
 	return SE2(x,y,theta);
 }
 
+cv::Mat convert::tocvMat(const SE2 &se2T)
+{
+    cv::Mat m = cv::Mat::eye(3,3,CV_32F);
+
+    double c = cos(se2T.theta);
+    double s = sin(se2T.theta);
+
+    m.at<float>(0,0) = c;
+    m.at<float>(0,1) = -s;
+    m.at<float>(1,0) = s;
+    m.at<float>(1,1) = c;
+    m.at<float>(0,2) = se2T.x;
+    m.at<float>(1,2) = se2T.y;
+
+    return m;
+}
+
 Eigen::Matrix4d convert::toMatrix4d(const SE2 &se2T)
 {
 	double c = cos(se2T.theta);
@@ -55,4 +72,20 @@ Eigen::Matrix4d convert::toMatrix4d(const cv::Mat &cvT)
             0, 0, 0, 1;
 			
     return mat;
+}
+
+void convert::mat2vector(const cv::Mat &img, std::vector<float> &vimg)
+{
+    int rows = img.rows;
+    int cols = img.cols;
+
+    for (size_t c = 0; c < cols; c++)
+    {
+        for (size_t r = 0; r < rows; r++)
+        {
+            vimg.push_back(img.at<u_char>(r,c));
+        }
+    }
+    
+    
 }

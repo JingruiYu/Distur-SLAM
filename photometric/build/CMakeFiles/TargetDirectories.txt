@@ -1,3 +1,0 @@
-/home/yujr/Distur-SLAM/photometric/build/CMakeFiles/edit_cache.dir
-/home/yujr/Distur-SLAM/photometric/build/CMakeFiles/rebuild_cache.dir
-/home/yujr/Distur-SLAM/photometric/build/CMakeFiles/try.dir
