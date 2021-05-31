@@ -20,11 +20,13 @@ void optimizer::FrameDirectOptimization(Frame* pF1, Frame* pF2, cv::Mat &Tc1c2)
 	std::vector<cv::Point2f> vmp2 = pF2->vPoint2fs;
 
 	SE2 Tcc = convert::toSE2(Tc1c2);
+	SE2 Tcc_cp = convert::toSE2(Tc1c2);
 
 	int row = pF1->img_gray.rows;
 	int col = pF2->img_gray.cols;
 
 	ceres::Problem problem;
+	ceres::LocalParameterization* angle_local_parameter = new ceres::AutoDiffLocalParameterization<AngleLocalParameterization,1,1>;
 	for (size_t i = 0; i < vmp1.size(); i++)
 	{
 		problem.AddResidualBlock(
@@ -34,7 +36,9 @@ void optimizer::FrameDirectOptimization(Frame* pF1, Frame* pF2, cv::Mat &Tc1c2)
 			new ceres::HuberLoss(1.0),
 			&Tcc.x, &Tcc.y, &Tcc.theta
 		);
+		problem.SetParameterization(&Tcc.theta, angle_local_parameter);
 	}
+	
 	
 	ceres::Solver::Options options;
     options.linear_solver_type = ceres::LinearSolverType::SPARSE_SCHUR;
@@ -43,9 +47,35 @@ void optimizer::FrameDirectOptimization(Frame* pF1, Frame* pF2, cv::Mat &Tc1c2)
     ceres::Solve(options, &problem, &summary);
     // std::cout << summary.FullReport() << "\n";
 
+	bool isupdate = true;
 	if(summary.IsSolutionUsable())
     {
-		Tc1c2 = convert::tocvMat(Tcc);
+		double ln = std::sqrt(Tcc.x*Tcc.x + Tcc.y*Tcc.y);
+		double lo = std::sqrt(Tcc_cp.x*Tcc_cp.x + Tcc_cp.y*Tcc_cp.y);
+		double dt = std::abs(Tcc_cp.theta - Tcc.theta);
+
+		if (ln/lo > 3|| ln/lo < 0.2)
+		{
+			std::cout << "ln/lo: " << ln/lo << std::endl;
+			isupdate = false;
+		}
+
+		if (dt > 0.5)
+		{
+			std::cout << "dt: " << dt << std::endl;
+			isupdate = false;
+		}
     }
-	std::cout << "FrameDirectOptimization ... " << std::endl;
+	else
+	{
+		isupdate = false;
+	}
+
+	if (isupdate)
+	{
+		Tc1c2 = convert::tocvMat(Tcc);
+	}
+	
+	
+	// std::cout << "FrameDirectOptimization ... " << std::endl;
 }

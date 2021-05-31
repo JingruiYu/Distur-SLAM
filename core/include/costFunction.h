@@ -103,3 +103,24 @@ struct directError
     std::unique_ptr<ceres::BiCubicInterpolator<ceres::Grid2D<float> > > img2_get_pixel_gray_val;
 
 };
+
+// Normalizes the angle in radians between [-pi and pi).
+template <typename T>
+inline T NormalizeAngle(const T& angle_radians)
+{
+    // Use ceres::floor because it is specialized for double and Jet types.
+    T two_pi(2.0 * M_PI);
+    return angle_radians -
+           two_pi * ceres::floor((angle_radians + T(M_PI)) / two_pi);
+}
+
+class AngleLocalParameterization
+{
+public:
+    template <typename T>
+    bool operator()(const T* theta_radians, const T* delta_theta_radians, T* theta_radians_plus_delta) const
+    {
+        *theta_radians_plus_delta = NormalizeAngle(*theta_radians + *delta_theta_radians);
+        return true;
+    }
+};

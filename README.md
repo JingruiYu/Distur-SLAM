@@ -13,3 +13,5 @@ v2.2 : try to viewer via pangolin, while there some problem in the multiple thre
 v2.3 : pangolin viewer trajectery avoiding mulitp thread; adding se2 and keyframe
 
 v2.4 : pose direct optimization
+
+v2.5 : check rotation
