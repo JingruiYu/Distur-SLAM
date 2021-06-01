@@ -32,6 +32,16 @@ SE2 convert::toSE2(const cv::Mat &cvT)
 	return SE2(x,y,theta);
 }
 
+SE2 convert::toSE2(const Eigen::Matrix3d &cvT)
+{
+	double yaw = std::atan2(cvT(1,0), cvT(0,0));
+    double theta = normalize_angle(yaw);
+    double x = cvT(0,2);
+    double y = cvT(1,2);
+
+	return SE2(x,y,theta);
+}
+
 cv::Mat convert::tocvMat(const SE2 &se2T)
 {
     cv::Mat m = cv::Mat::eye(3,3,CV_32F);
@@ -47,6 +57,19 @@ cv::Mat convert::tocvMat(const SE2 &se2T)
     m.at<float>(1,2) = se2T.y;
 
     return m;
+}
+
+Eigen::Matrix3d convert::toMatrix3d(const SE2 &se2T)
+{
+	double c = cos(se2T.theta);
+    double s = sin(se2T.theta);
+
+    Eigen::Matrix3d mat;
+    mat <<  c,-s, se2T.x,
+            s, c, se2T.y,
+            0, 0, 1;
+
+    return mat;
 }
 
 Eigen::Matrix4d convert::toMatrix4d(const SE2 &se2T)

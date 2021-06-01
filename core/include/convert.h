@@ -20,9 +20,11 @@ public:
 	static double normalize_angle(double theta);
 
 	static SE2 toSE2(const cv::Mat &cvT);
+	static SE2 toSE2(const Eigen::Matrix3d &cvT);
 
 	static cv::Mat tocvMat(const SE2 &se2T);
 
+	static Eigen::Matrix3d toMatrix3d(const SE2 &se2T);
 	static Eigen::Matrix4d toMatrix4d(const SE2 &se2T);
 	static Eigen::Matrix4d toMatrix4d(const cv::Mat &cvT);
 
