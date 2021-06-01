@@ -8,32 +8,13 @@ bool line::CalculateMajorLine(const Frame* pF)
     const float cx = 0.5 * pF->cols;
     const float cy = 0.5 * pF->rows;
 
-    const cv::Mat& imageRaw = pF->img.clone();
-
-    LSDDetector::LSDOptions opts;
-    opts.min_length = 0.025 * std::max(pF->rows, pF->cols);
-
-    std::vector<KeyLine> keylines_;
-    std::vector<KeyLine> keylines;
-
-    cv::Ptr<LSDDetector> lsd = LSDDetector::createLSDDetectorC();
-
-    lsd->detect(imageRaw,keylines_,1,1,opts);
-
-    keylines.clear();
-    for(auto & keyline : keylines_)
-    {
-        if( keyline.octave == 0 && keyline.lineLength >= 20)
-        {
-            keylines.push_back(keyline);
-        }
-    }
-
+    cv::Mat imageRaw = pF->img.clone();
+    
     // // extract lsd lines
-    // LineExtractorPtr mpLineExtractor = std::make_shared<LineExtractor>();
-    // LineExtractor* mpLineExtractor = new LineExtractor();
-    // std::vector<KeyLine> vKeyLines;
-    // mpLineExtractor->extractLines(imageRaw, vKeyLines);
+    LineExtractorPtr mpLineExtractor = std::make_shared<LineExtractor>();
+    std::vector<KeyLine> vKeyLines;
+    mpLineExtractor->extractLines(imageRaw, vKeyLines);
+    std::cout << "vKeyLines: " << vKeyLines.size() << std::endl;
 
     return true;
 }

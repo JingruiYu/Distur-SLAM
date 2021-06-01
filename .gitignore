@@ -19,3 +19,4 @@ photometric/DirectBA/0302DirectCeresBA/*.txt
 photometric/DirectBA/0302DirectCeresBA/.kdev4/0302DirectCeresBA.kdev4
 photometric/DirectBA/0302DirectCeresBA/build/
 photometric/DirectBA/0302DirectCeresBA/cmake/
+.vscode/launch.json

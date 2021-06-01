@@ -39,5 +39,5 @@ private:
     cv::Ptr<LSDDetector> lsd;
     cv::Ptr<BinaryDescriptor> lbd;
 };
-// typedef std::shared_ptr<LineExtractor> LineExtractorPtr;
+typedef std::shared_ptr<LineExtractor> LineExtractorPtr;
 
