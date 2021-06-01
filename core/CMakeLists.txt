@@ -3,13 +3,14 @@ project(Distur)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
-find_package(OpenCV QUIET)
+find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(Pangolin REQUIRED)
+find_package(Ceres REQUIRED)
 
 # include_directories( "/usr/include/eigen3" )
 
-find_package(Pangolin REQUIRED)
-find_package(Ceres REQUIRED)
+add_subdirectory(Thirdparty/line_descriptor)
 
 include_directories(
     include
@@ -30,6 +31,8 @@ add_library(${PROJECT_NAME}
     src/SE2.cpp
     src/keyFrame.cpp
     src/optimizer.cpp
+    src/line.cpp
+    src/LineExtractor.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

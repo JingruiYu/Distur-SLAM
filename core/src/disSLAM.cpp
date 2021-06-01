@@ -8,6 +8,7 @@
 #include "disSLAM.h"
 #include "keyFrame.h"
 #include "optimizer.h"
+#include "line.h"
 
 disSLAM::disSLAM(/* args */)
 {
@@ -51,6 +52,11 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d 
     // cv::imshow("corners", img_show);
     // cv::waitKey(30);
 
+    if (line::CalculateMajorLine(curFrame))
+    {
+        std::cout << "CalculateMajorLine ... " << std::endl;
+    }
+    
     cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
     // optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
     checkT(Tc1c2);
