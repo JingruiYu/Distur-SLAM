@@ -21,11 +21,12 @@ int main(int argc, char const *argv[])
 
 	for (int i = 0; i < vImg.size(); i++)
 	{
-		cv::Mat bird = cv::imread(std::string(argv[1])+"/"+vBird[i], CV_LOAD_IMAGE_UNCHANGED);
+		cv::Mat bird = cv::imread(std::string(argv[1])+"/"+vBird[i], cv::IMREAD_UNCHANGED);
+		cv::Mat mask = cv::imread(std::string(argv[1])+"/"+vBirdMask[i], cv::IMREAD_UNCHANGED);
 		double tframe = vTimestamps[i];
 		cv::Vec3d gtPose = vgtPose[i];
-
-		mSLAM->TrackwithOF(i,bird,tframe,gtPose);
+		
+		mSLAM->TrackwithOF(i,bird,mask,tframe,gtPose);
 	}
 	
 	

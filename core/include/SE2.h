@@ -20,6 +20,8 @@ public:
 	~SE2();
 
 	Eigen::Matrix4d toMatrix4d();
+
+	cv::Point2f operator*(const cv::Point2f& pt) const;
 public:
 	double x, y, theta;
 };

@@ -109,6 +109,20 @@ void convert::mat2vector(const cv::Mat &img, std::vector<float> &vimg)
             vimg.push_back(img.at<u_char>(r,c));
         }
     }
-    
-    
+}
+
+cv::Point2f convert::BirdviewPT2XY(const cv::Point2f &kp)
+{
+    int birdviewRows = 384;
+    int birdviewCols = 384;
+    float pixel2meter = 0.03984;
+    float meter2pixel = 25.1;
+    float rear_axle_to_center = 1.393;
+
+    cv::Point2f p;
+    p.x = (birdviewRows/2.0-kp.y)*pixel2meter+rear_axle_to_center;
+    p.y = (birdviewCols/2.0-kp.x)*pixel2meter;
+    // p.z = -0.32115;
+
+    return p;
 }

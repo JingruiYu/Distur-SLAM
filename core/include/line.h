@@ -3,10 +3,12 @@
 #include "LineExtractor.h"
 #include "Frame.h"
 
-class line
+class lineport
 {
 public:
-    static bool CalculateMajorLine(const Frame* pF);
+    static bool CalculateMajorLine(const Frame* pF, cv::Point3f& line);
+public:
+    
 };
 
 

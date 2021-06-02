@@ -24,7 +24,7 @@ public:
     disSLAM(/* args */);
     ~disSLAM();
 
-    void TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d gtPose);
+    void TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d gtPose);
 
     void checkT(cv::Mat &Tc1c2);
     void checkT(SE2 &Tc1c2);

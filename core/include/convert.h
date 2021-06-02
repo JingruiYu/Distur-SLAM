@@ -29,4 +29,6 @@ public:
 	static Eigen::Matrix4d toMatrix4d(const cv::Mat &cvT);
 
 	static void mat2vector(const cv::Mat &img, std::vector<float> &vimg);
+
+	static cv::Point2f BirdviewPT2XY(const cv::Point2f& pt);
 };

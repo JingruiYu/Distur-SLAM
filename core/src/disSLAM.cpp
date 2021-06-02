@@ -10,6 +10,8 @@
 #include "optimizer.h"
 #include "line.h"
 
+#define macdebugwithoutviewer
+
 disSLAM::disSLAM(/* args */)
 {
     mpMap = new map();
@@ -17,7 +19,11 @@ disSLAM::disSLAM(/* args */)
     view::viewerConfig vfg;
     mpViewer = new view("viewer",vfg,mpMap);
     std::cout << "hello disSLAM " << std::endl;
+
+#ifndef macdebugwithoutviewer
     mpViewer->createWindow();
+#endif
+
     // viewer_thread = std::thread(&view::run,mpViewer);
     // mpViewer->run();
 }
@@ -26,9 +32,16 @@ disSLAM::~disSLAM()
 {
 }
 
-void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose)
+void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose)
 {
-    curFrame = new Frame(_idx, _img, _timestamp, _gtPose);
+    curFrame = new Frame(_idx, _img, _img_mask, _timestamp, _gtPose);
+
+    cv::Point3f mline;
+    if (lineport::CalculateMajorLine(curFrame,mline))
+    {
+        std::cout << "CalculateMajorLine ... " << std::endl;
+    }
+
     if (!lastFrame)
     {
         cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
@@ -49,13 +62,9 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d 
     {
         cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
     }
-    // cv::imshow("corners", img_show);
+    // cv::imshow("corners", curFrame->img_mask);
     // cv::waitKey(30);
 
-    if (line::CalculateMajorLine(curFrame))
-    {
-        std::cout << "CalculateMajorLine ... " << std::endl;
-    }
     
     cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
     // optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
@@ -68,7 +77,12 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d 
     // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
 
     mpMap->addkeyFrame(curFrame);
+
+    // viewer
+
+#ifndef macdebugwithoutviewer
     mpViewer->runcore(_idx);
+#endif
 
     lastFrame = curFrame;
     return;

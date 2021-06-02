@@ -7,12 +7,14 @@
 
 #include "Frame.h"
 
-Frame::Frame(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose)
+Frame::Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose)
 {
     idx = _idx;
     timestamp = _timestamp;
 
     mGtPose = SE2(_gtPose[0], _gtPose[1], _gtPose[2]);
+
+    img_mask = _img_mask.clone();
 
     rows = _img.rows;
     cols = _img.cols;
@@ -41,8 +43,13 @@ bool Frame::extractFastPoint()
         return false;
     }
     
-    cv::goodFeaturesToTrack(img_gray,vPoint2fs,100,0.01,5.0);
+    cv::Mat img_mask_gray;
+    cv::cvtColor(img_mask, img_mask_gray, cv::COLOR_RGB2GRAY);
 
+    cv::goodFeaturesToTrack(img_gray,vPoint2fs,100,0.01,5.0,img_mask_gray);
+
+    std::cout << "vPoint2fs: " << vPoint2fs.size() << std::endl;
+    
     if (vPoint2fs.size() < 20)
     {
         std::cout << "the extracted fast points is little. " << std::endl;

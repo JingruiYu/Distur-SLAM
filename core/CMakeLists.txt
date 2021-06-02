@@ -3,13 +3,14 @@ project(Distur)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 4 REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(Ceres REQUIRED)
 
 # include_directories( "/usr/include/eigen3" )
 
+add_subdirectory(Thirdparty/DBoW2)
 add_subdirectory(Thirdparty/line_descriptor)
 
 include_directories(
@@ -33,6 +34,8 @@ add_library(${PROJECT_NAME}
     src/optimizer.cpp
     src/line.cpp
     src/LineExtractor.cpp
+    src/KeyLineGeometry.cpp
+    src/FeatureLine.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -41,6 +44,7 @@ ${EIGEN3_LIBS}
 pangolin
 ${CERES_LIBRARIES}
 linedesc
+DBoW2
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)

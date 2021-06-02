@@ -15,7 +15,7 @@
 class Frame
 {
 public:
-	Frame(int _idx, cv::Mat &_img, double _timestamp, cv::Vec3d _gtPose);
+	Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose);
 	~Frame();
 
 	bool extractFastPoint();
@@ -25,6 +25,7 @@ public:
 public:
 	cv::Mat img;
 	cv::Mat img_gray;
+	cv::Mat img_mask;
 	std::vector<cv::Mat> img_pyr;
 	
 	SE2 se2Twc;

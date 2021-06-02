@@ -20,6 +20,7 @@ float pixel2meter = 0.03984;
 float meter2pixel = 25.1;
 float rear_axle_to_center = 1.393;
 
+
 template <typename T>
 Eigen::Matrix<T, 2, 2> to2DRotationMatrix(T yaw_radians)
 {
@@ -123,4 +124,57 @@ public:
         *theta_radians_plus_delta = NormalizeAngle(*theta_radians + *delta_theta_radians);
         return true;
     }
+};
+
+
+struct ParallelLineCostFunctor
+{
+    ParallelLineCostFunctor(double a, double b)
+      : a(a), b(b)
+    {
+        ;
+    }
+
+    template<typename T>
+    bool operator()(const T* const line, T* residuals) const
+    {
+        Eigen::Matrix<T,2,1> le(line[1], -line[0]);
+        residuals[0] = ceres::abs(T(a) * le[0] + T(b) * le[1]) / ceres::sqrt(le[0] * le[0] + le[1] * le[1]);
+        return true;
+    }
+
+    static ceres::CostFunction* Create(double a, double b)
+    {
+        return (new ceres::AutoDiffCostFunction<ParallelLineCostFunctor,1,2>(new ParallelLineCostFunctor(a,b)));
+    }
+
+protected:
+
+    double a, b;
+};
+
+struct OrthogonalLineCostFunctor
+{
+    OrthogonalLineCostFunctor(double a, double b)
+      : a(a), b(b)
+    {
+        ;
+    }
+
+    template<typename T>
+    bool operator()(const T* const line, T* residuals) const
+    {
+        Eigen::Matrix<T,2,1> le(line[0], line[1]);
+        residuals[0] = ceres::abs(T(a) * le[0] + T(b) * le[1]) / ceres::sqrt(le[0] * le[0] + le[1] * le[1]);
+        return true;
+    }
+
+    static ceres::CostFunction* Create(double a, double b)
+    {
+        return (new ceres::AutoDiffCostFunction<OrthogonalLineCostFunctor,1,2>(new OrthogonalLineCostFunctor(a,b)));
+    }
+
+protected:
+
+    double a,b;
 };

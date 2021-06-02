@@ -79,3 +79,43 @@ void optimizer::FrameDirectOptimization(Frame* pF1, Frame* pF2, cv::Mat &Tc1c2)
 	
 	// std::cout << "FrameDirectOptimization ... " << std::endl;
 }
+
+
+void optimizer::OptimizeMajorLine(const std::vector<KeyLine> &vKeyLines, const std::vector<bool> &vIsParallel,
+                                  cv::Point3f &le)
+{
+    assert(vKeyLines.size() == vIsParallel.size());
+    int N = vKeyLines.size();
+
+    ceres::Problem problem;
+
+    Eigen::Vector2d normal(le.x, le.y);
+    for(int i = 0; i < N; i++)
+    {
+        cv::Point3f le_i = birdview::KeyLineGeometry::GetKeyLineCoeff(vKeyLines[i]);
+        if(vIsParallel[i])
+        {
+            ceres::CostFunction* cost_function = ParallelLineCostFunctor::Create(le_i.x, le_i.y);
+            problem.AddResidualBlock(cost_function, nullptr,normal.data());
+        }
+        else
+        {
+            ceres::CostFunction* cost_function = OrthogonalLineCostFunctor::Create(le_i.x, le_i.y);
+            problem.AddResidualBlock(cost_function, nullptr,normal.data());
+        }
+    }
+
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.minimizer_progress_to_stdout = false;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options,&problem,&summary);
+
+    if(!summary.IsSolutionUsable())
+    {
+        return;
+    }
+
+    le.x = normal[0];
+    le.y = normal[1];
+}

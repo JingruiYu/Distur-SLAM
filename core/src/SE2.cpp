@@ -36,3 +36,15 @@ Eigen::Matrix4d SE2::toMatrix4d()
 
     return mat;
 }
+
+// current -> world
+cv::Point2f SE2::operator*(const cv::Point2f &pt) const
+{
+    double c = std::cos(theta);
+    double s = std::sin(theta);
+
+    double xw = c * pt.x - s * pt.y + x;
+    double yw = s * pt.x + c * pt.y + y;
+
+    return cv::Point2f(xw, yw);
+}
