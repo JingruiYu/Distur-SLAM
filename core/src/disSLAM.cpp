@@ -37,7 +37,7 @@ disSLAM::~disSLAM()
 void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose)
 {
     curFrame = new Frame(_idx, _img, _img_mask, _timestamp, _gtPose);
-    lineport::CalculateMajorLine(curFrame)
+    lineport::CalculateMajorLine(curFrame);
 
     if (!lastFrame)
     {
