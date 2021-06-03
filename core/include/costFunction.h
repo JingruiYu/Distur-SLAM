@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Frame.h"
+// #include "config.h"
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -13,12 +14,6 @@
 #include <ceres/ceres.h>
 #include <memory>
 #include <iostream>
-
-int birdviewRows = 384;
-int birdviewCols = 384;
-float pixel2meter = 0.03984;
-float meter2pixel = 25.1;
-float rear_axle_to_center = 1.393;
 
 
 template <typename T>
@@ -36,8 +31,8 @@ template <typename T>
 Eigen::Matrix<T,2,1> pixel2XY(T u, T v)
 {
     Eigen::Matrix<T, 2, 1> pc;
-    pc[0] = (T(birdviewRows/2.0)-v) * T(pixel2meter) + T(rear_axle_to_center);
-    pc[1] = (T(birdviewCols/2.0)-u) * T(pixel2meter);
+    pc[0] = (T(config::birdviewRows/2.0)-v) * T(config::pixel2meter) + T(config::rear_axle_to_center);
+    pc[1] = (T(config::birdviewCols/2.0)-u) * T(config::pixel2meter);
 
     return pc;
 }
@@ -46,8 +41,8 @@ template <typename T>
 Eigen::Matrix<T,2,1> XY2pixel(T x, T y)
 {
     Eigen::Matrix<T, 2, 1> pu;
-    pu[0] = T(birdviewCols/2.0) - y * T(meter2pixel);
-    pu[1] = T(birdviewRows/2.0) - (x- T(rear_axle_to_center)) * T(meter2pixel);
+    pu[0] = T(config::birdviewCols/2.0) - y * T(config::meter2pixel);
+    pu[1] = T(config::birdviewRows/2.0) - (x- T(config::rear_axle_to_center)) * T(config::meter2pixel);
 
     return pu;
 }

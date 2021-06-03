@@ -8,13 +8,13 @@
 static bool isRef = false;
 static cv::Point2f mLastDir;
 
-bool lineport::CalculateMajorLine(Frame* pF, cv::Point3f& _mline)
+bool lineport::CalculateMajorLine(Frame* pF)
 {
     const float th = cos(M_PI / 4);
     const float th2 = cos(M_PI / 10);
     const float thDist = 0.05;
-    const float cx = 0.5 * pF->cols;
-    const float cy = 0.5 * pF->rows;
+    const float cx = 0.5 * config::birdviewCols;
+    const float cy = 0.5 * config::birdviewRows;
 
     cv::Mat imageRaw = pF->img.clone();
     cv::Mat imageMask = pF->img_mask.clone();
@@ -24,7 +24,7 @@ bool lineport::CalculateMajorLine(Frame* pF, cv::Point3f& _mline)
     LineExtractorPtr mpLineExtractor = std::make_shared<LineExtractor>();
     std::vector<KeyLine> vKeyLines;
     mpLineExtractor->extractLines(imageRaw, vKeyLines, imageMask);
-    std::cout << "vKeyLines: " << vKeyLines.size() << std::endl;
+    // std::cout << "vKeyLines: " << vKeyLines.size() << std::endl;
 
     // find major direction from lsd lines
     std::vector<bool> status;
@@ -33,7 +33,7 @@ bool lineport::CalculateMajorLine(Frame* pF, cv::Point3f& _mline)
     birdview::KeyLineGeometry::reduceVector(vKeyLines, status);
 
     // optimize direction
-    _mline = birdview::KeyLineGeometry::GetKeyLineCoeff(major_line);
+    cv::Point3f _mline = birdview::KeyLineGeometry::GetKeyLineCoeff(major_line);
     status = std::vector<bool>(vKeyLines.size(), false);
     cv::Point3f infinity(_mline.y, - _mline.x, 0.0);
     for(int i = 0; i < vKeyLines.size(); i++)
@@ -97,7 +97,7 @@ bool lineport::CalculateMajorLine(Frame* pF, cv::Point3f& _mline)
     cv::imshow("KeyLines", keylineImg);
     cv::waitKey(30);
 
-    std::cout << "line::CalculateMajorLine ... " << std::endl;
+    // std::cout << "line::CalculateMajorLine ... " << std::endl;
 
     return true;
 }

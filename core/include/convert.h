@@ -9,6 +9,7 @@
 
 #include "SE2.h"
 #include "Frame.h"
+#include "config.h"
 
 #include <Eigen/Dense>
 #include <Eigen/Core>

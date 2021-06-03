@@ -16,6 +16,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <thread>
+#include <fstream>
 #include <iostream>
 
 class disSLAM
@@ -34,6 +35,8 @@ public:
     Frame *lastFrame = nullptr;
     view *mpViewer = nullptr;
     map *mpMap = nullptr;
+
+    std::ofstream resFile;
 
     std::thread viewer_thread;
 };

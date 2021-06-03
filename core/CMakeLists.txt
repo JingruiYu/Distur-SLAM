@@ -36,6 +36,7 @@ add_library(${PROJECT_NAME}
     src/LineExtractor.cpp
     src/KeyLineGeometry.cpp
     src/FeatureLine.cpp
+    src/config.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

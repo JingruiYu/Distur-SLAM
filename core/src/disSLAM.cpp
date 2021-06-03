@@ -26,6 +26,8 @@ disSLAM::disSLAM(/* args */)
 
     // viewer_thread = std::thread(&view::run,mpViewer);
     // mpViewer->run();
+
+    resFile.open("testres.txt");
 }
 
 disSLAM::~disSLAM()
@@ -35,12 +37,7 @@ disSLAM::~disSLAM()
 void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose)
 {
     curFrame = new Frame(_idx, _img, _img_mask, _timestamp, _gtPose);
-
-    cv::Point3f mline;
-    if (lineport::CalculateMajorLine(curFrame,mline))
-    {
-        std::cout << "CalculateMajorLine ... " << std::endl;
-    }
+    lineport::CalculateMajorLine(curFrame)
 
     if (!lastFrame)
     {
@@ -63,8 +60,27 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
         mpMap->GetMajorLine(global_line);
         curFrame->GetMajorLine(local_line);
 
-        std::cout << "global_line: " << global_line.sP << " - " << global_line.eP << std::endl;
-        std::cout << "local_line: " << local_line.sP << " - " << local_line.eP << std::endl;
+        cv::Point2f gDir = global_line.eP - global_line.sP;
+        cv::Point2f lDir = local_line.eP - local_line.sP;
+
+        float flag = 1.0;
+        if (lDir.y > 0)
+        {
+            flag = -1.0;
+        }
+        
+        float cos_theta = std::fabs(gDir.dot(lDir)) / (cv::norm(gDir) * cv::norm(lDir));
+        float cur_theta = flag * std::acos(cos_theta);
+        float cur_angle =  cur_theta / 3.14 * 180;
+        float gt_angle = curFrame->mGtPose.theta / 3.14 * 180;
+
+        // std::cout << "global_line: " << global_line.sP << " - " << global_line.eP << std::endl;
+        // std::cout << "local_line: " << local_line.sP << " - " << local_line.eP << std::endl;
+        // std::cout << "gDir: " << gDir << std::endl;
+        // std::cout << "lDir: " << lDir << std::endl;
+        // std::cout << "theta: " << theta << std::endl;
+
+        resFile << curFrame->mGtPose.theta << " vs " << cur_theta << " , " << gt_angle << " vs " << cur_angle << " ---- " << " local : sP: " << local_line.sP << " - " << local_line.eP << " , global: " << global_line.sP << " - " << global_line.eP << std::endl;
     }
     
     // std::cout << "cur_pyr: " << curFrame->img_pyr[0].size() << std::endl;

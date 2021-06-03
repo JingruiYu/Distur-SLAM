@@ -10,6 +10,7 @@
 #include "SE2.h"
 #include "convert.h"
 #include "FeatureLine.h"
+#include "config.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
@@ -50,14 +51,14 @@ public:
 		float pa,pb;
 
 		bpoint(){}
-		bpoint(float _ou, float _ov, float _rows, float _cols) : ou(_ou), ov(_ov) 
+		bpoint(float _ou, float _ov) : ou(_ou), ov(_ov) 
 		{
-			v = _rows * 0.5 - ov;
-			u = _cols * 0.5 - ou;
+			v = config::birdviewRows * 0.5 - ov;
+			u = config::birdviewCols * 0.5 - ou;
 			s = 1.0;
-			r = 1.393;
-			p2m = 0.03984;
-			m2p = 25.1;
+			r = config::rear_axle_to_center;
+			p2m = config::pixel2meter;
+			m2p = config::meter2pixel;
 			updateXY();
 
 			pa = 1.0;
@@ -76,8 +77,6 @@ public:
 
 	int idx;
 	double timestamp;
-
-	float rows, cols;
 };
 
 

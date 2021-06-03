@@ -16,9 +16,6 @@ Frame::Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv:
 
     img_mask = _img_mask.clone();
 
-    rows = _img.rows;
-    cols = _img.cols;
-
     cv::cvtColor(_img, img_gray, cv::COLOR_RGB2GRAY);
 
     cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(20.0, cv::Size(8, 8));
@@ -48,7 +45,7 @@ bool Frame::extractFastPoint()
 
     cv::goodFeaturesToTrack(img_gray,vPoint2fs,100,0.01,5.0,img_mask_gray);
 
-    std::cout << "vPoint2fs: " << vPoint2fs.size() << std::endl;
+    // std::cout << "vPoint2fs: " << vPoint2fs.size() << std::endl;
     
     if (vPoint2fs.size() < 20)
     {
@@ -58,7 +55,7 @@ bool Frame::extractFastPoint()
 
     for (auto p:vPoint2fs)
     {
-        bpoint bp(p.x,p.y,rows,cols);
+        bpoint bp(p.x,p.y);
         vbPoints.push_back(bp);
     }
 
@@ -90,7 +87,7 @@ bool Frame::setMappoints(std::vector<cv::Point2f>& _vPoints)
 
     for (auto p:_vPoints)
     {
-        bpoint bp(p.x,p.y,rows,cols);
+        bpoint bp(p.x,p.y);
         vbPoints.push_back(bp);
         vPoint2fs.push_back(p);
     }

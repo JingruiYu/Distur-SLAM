@@ -19,8 +19,8 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::LK(Fram
 {
 	const std::vector<cv::Mat> &im1 = refFrame->img_pyr;
     const std::vector<cv::Mat> &im2 = curFrame->img_pyr;
-	int rows = curFrame->rows;
-    int cols = curFrame->cols;
+	int rows = config::birdviewRows;
+    int cols = config::birdviewCols;
 	// std::cout << "curFrame->rows : " << curFrame->rows << ", rows: " << rows << std::endl;
 
 	if (!curFrame->extractFastPoint())
