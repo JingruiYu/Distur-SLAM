@@ -82,6 +82,7 @@ bool lineport::CalculateMajorLine(const Frame* pF, cv::Point3f& _mline)
 
     // convert to XY coordinate
     birdview::Line MajorLine = birdview::Line(convert::BirdviewPT2XY(l.sP), convert::BirdviewPT2XY(l.eP));
+    // pF->SetMajorLine(MajorLine);
     // pFrame->SetMajorLine(MajorLine);
 
     // visualization

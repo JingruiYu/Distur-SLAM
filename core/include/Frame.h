@@ -9,6 +9,7 @@
 
 #include "SE2.h"
 #include "convert.h"
+#include "FeatureLine.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
@@ -22,6 +23,9 @@ public:
 	void setTwc(cv::Mat &Twc);
 	bool setMappoints(std::vector<cv::Point2f>& _vPoints);
 	
+	bool GetMajorLine(birdview::Line& line) const;
+    void SetMajorLine(const birdview::Line& line);
+
 public:
 	cv::Mat img;
 	cv::Mat img_gray;
@@ -31,6 +35,9 @@ public:
 	SE2 se2Twc;
 	cv::Mat Twc;
 	SE2 mGtPose;
+
+	birdview::Line mMajorLine;  // in XY coordinate
+    bool mbIsMajorLineSet;
 
 	struct bpoint
 	{

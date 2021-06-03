@@ -97,3 +97,19 @@ bool Frame::setMappoints(std::vector<cv::Point2f>& _vPoints)
 
     return true;
 }
+
+bool Frame::GetMajorLine(birdview::Line& line) const
+{
+    if(!mbIsMajorLineSet)
+    {
+        return false;
+    }
+    line = mMajorLine;
+    return true;
+}
+
+void Frame::SetMajorLine(const birdview::Line& line)
+{
+    mMajorLine = line;
+    mbIsMajorLineSet = true;
+}
