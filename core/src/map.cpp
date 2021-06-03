@@ -36,3 +36,17 @@ std::vector<keyFrame*> map::getKeyFrameAll()
 {
 	return std::vector<keyFrame*>(vkeyFrame.begin(),vkeyFrame.end());
 }
+
+void map::SetMajorLine(const birdview::Line &major_line)
+{
+    mMajorLine = major_line;
+    mbIsMajorLineSet = true;
+}
+
+bool map::GetMajorLine(birdview::Line& major_line)
+{
+    if(!mbIsMajorLineSet)
+        return false;
+    major_line = mMajorLine;
+    return true;
+}

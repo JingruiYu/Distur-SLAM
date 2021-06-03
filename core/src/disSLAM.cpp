@@ -46,11 +46,27 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     {
         cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
         curFrame->setTwc(Twc);
+
+        birdview::Line major_line;
+        if(curFrame->GetMajorLine(major_line))
+            mpMap->SetMajorLine(major_line);
+
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
         return;
     }
 
+
+    if (true)
+    {
+        birdview::Line global_line, local_line;
+        mpMap->GetMajorLine(global_line);
+        curFrame->GetMajorLine(local_line);
+
+        std::cout << "global_line: " << global_line.sP << " - " << global_line.eP << std::endl;
+        std::cout << "local_line: " << local_line.sP << " - " << local_line.eP << std::endl;
+    }
+    
     // std::cout << "cur_pyr: " << curFrame->img_pyr[0].size() << std::endl;
     // std::cout <<  "last_pyr: " << lastFrame->img_pyr[0].size() << std::endl;
     std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastFrame,curFrame,false);

@@ -8,7 +8,7 @@
 static bool isRef = false;
 static cv::Point2f mLastDir;
 
-bool lineport::CalculateMajorLine(const Frame* pF, cv::Point3f& _mline)
+bool lineport::CalculateMajorLine(Frame* pF, cv::Point3f& _mline)
 {
     const float th = cos(M_PI / 4);
     const float th2 = cos(M_PI / 10);
@@ -82,7 +82,7 @@ bool lineport::CalculateMajorLine(const Frame* pF, cv::Point3f& _mline)
 
     // convert to XY coordinate
     birdview::Line MajorLine = birdview::Line(convert::BirdviewPT2XY(l.sP), convert::BirdviewPT2XY(l.eP));
-    // pF->SetMajorLine(MajorLine);
+    pF->SetMajorLine(MajorLine);
     // pFrame->SetMajorLine(MajorLine);
 
     // visualization
@@ -93,21 +93,6 @@ bool lineport::CalculateMajorLine(const Frame* pF, cv::Point3f& _mline)
     birdview::KeyLineGeometry::DrawLineDirection(keylineImg, _mline);
     birdview::KeyLineGeometry::DrawLineDirection(keylineImg, line2);
     cv::arrowedLine(keylineImg,l.sP,l.eP,cv::Scalar(0,0,255),4);
-
-
-    // if(isRef)
-    // {
-    //     birdview::Line global_line;
-    //     mpMap->GetMajorLine(global_line);
-    //     SE2 Tbw = mpKF->GetPoseTbw(); pF->Twc
-    //     birdview::Line local_line = Tbw * global_line;
-    //     birdview::Line lc(convert::ProjectXY2Birdview(local_line.sP), convert::ProjectXY2Birdview(local_line.eP));
-    //     cv::Point2f dir_c(lc.le.y, - lc.le.x);
-    //     dir_c = dir_c / cv::norm(dir_c);
-    //     lc = Line(image_center, image_center + cy * dir_c);
-
-    //     cv::arrowedLine(keylineImg,lc.sP,lc.eP,cv::Scalar(0,255,0),4);
-    // }
 
     cv::imshow("KeyLines", keylineImg);
     cv::waitKey(30);

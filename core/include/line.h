@@ -6,7 +6,7 @@
 class lineport
 {
 public:
-    static bool CalculateMajorLine(const Frame* pF, cv::Point3f& line);
+    static bool CalculateMajorLine(Frame* pF, cv::Point3f& line);
 public:
     
 };
