@@ -20,8 +20,9 @@ public:
 	Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose);
 	~Frame();
 
-	bool extractFastPoint();
 	void setTwc(cv::Mat &Twc);
+
+	bool extractFastPoint();
 	bool setMappoints(std::vector<cv::Point2f>& _vPoints);
 	
 	bool GetMajorLine(birdview::Line& line) const;

@@ -50,3 +50,23 @@ bool map::GetMajorLine(birdview::Line& major_line)
     major_line = mMajorLine;
     return true;
 }
+
+float map::getRotationViaLine(birdview::Line &local_line)
+{
+	birdview::Line global_line = mMajorLine;
+
+	cv::Point2f gDir = global_line.eP - global_line.sP;
+    cv::Point2f lDir = local_line.eP - local_line.sP;
+
+    float flag = 1.0;
+    if (lDir.y > 0)
+    {
+        flag = -1.0;
+    }
+    
+    float cos_theta = std::fabs(gDir.dot(lDir)) / (cv::norm(gDir) * cv::norm(lDir));
+    float cur_theta = flag * std::acos(cos_theta);
+    // float cur_angle =  cur_theta / 3.14 * 180;
+
+	return cur_theta;
+}

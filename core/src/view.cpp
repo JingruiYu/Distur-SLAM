@@ -200,3 +200,20 @@ void view::DrawKeyFrame()
     }
     glEnd();
 }
+
+void view::showKeyPts(cv::Mat& img, std::vector<cv::Point2f> &curKeyPt)
+{
+    cv::Mat img_show = img.clone();
+    for(auto kp:curKeyPt)
+    {
+        cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
+    }
+    cv::imshow("corners", img_show);
+    cv::waitKey(30);
+}
+
+void view::showLines(cv::Mat& img_show)
+{
+    cv::imshow("KeyLines", img_show);
+    cv::waitKey(30);
+}

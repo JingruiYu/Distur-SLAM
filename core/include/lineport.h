@@ -6,7 +6,7 @@
 class lineport
 {
 public:
-    static bool CalculateMajorLine(Frame* pF);
+    static bool CalculateMajorLine(Frame* pF, birdview::Line& MajorLine);
 public:
     
 };

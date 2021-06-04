@@ -149,7 +149,7 @@ bool KeyLineGeometry::GenerateRansacIndices(int TotalNum, int SelectNum, int Max
         vAvailableIndices = vAllIndices;
 
         // Select a minimum set
-        for(size_t j = 0; j < SelectNum; j++)
+        for(int j = 0; j < SelectNum; j++)
         {
             int randi = DUtils::Random::RandomInt(0,vAvailableIndices.size()-1);
             int idx = vAvailableIndices[randi];

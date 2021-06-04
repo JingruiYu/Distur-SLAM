@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 
 	disSLAM* mSLAM = new disSLAM();
 
-	for (int i = 0; i < vImg.size(); i++)
+	for (size_t i = 0; i < vImg.size(); i++)
 	{
 		cv::Mat bird = cv::imread(std::string(argv[1])+"/"+vBird[i], cv::IMREAD_UNCHANGED);
 		cv::Mat mask = cv::imread(std::string(argv[1])+"/"+vBirdMask[i], cv::IMREAD_UNCHANGED);

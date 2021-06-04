@@ -1,5 +1,8 @@
 #pragma once
 
+// #define macdebugwithoutviewer
+
+
 
 class config
 {
@@ -11,4 +14,6 @@ public:
     static const float rear_axle_to_center;
     static const float vehicle_length;
     static const float vehicle_width;
+
+    static bool useLineForRotation;
 };

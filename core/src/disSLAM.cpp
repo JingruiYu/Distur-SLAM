@@ -8,9 +8,9 @@
 #include "disSLAM.h"
 #include "keyFrame.h"
 #include "optimizer.h"
-#include "line.h"
+#include "lineport.h"
+// #include "config.h"
 
-#define macdebugwithoutviewer
 
 disSLAM::disSLAM(/* args */)
 {
@@ -22,10 +22,9 @@ disSLAM::disSLAM(/* args */)
 
 #ifndef macdebugwithoutviewer
     mpViewer->createWindow();
-#endif
-
     // viewer_thread = std::thread(&view::run,mpViewer);
     // mpViewer->run();
+#endif
 
     resFile.open("testres.txt");
 }
@@ -37,7 +36,8 @@ disSLAM::~disSLAM()
 void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv::Vec3d _gtPose)
 {
     curFrame = new Frame(_idx, _img, _img_mask, _timestamp, _gtPose);
-    lineport::CalculateMajorLine(curFrame);
+    birdview::Line local_line;
+    lineport::CalculateMajorLine(curFrame,local_line);
 
     if (!lastFrame)
     {
@@ -45,73 +45,41 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
         curFrame->setTwc(Twc);
 
         birdview::Line major_line;
-        if(curFrame->GetMajorLine(major_line))
-            mpMap->SetMajorLine(major_line);
+        curFrame->GetMajorLine(major_line);
+        mpMap->SetMajorLine(major_line);
 
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
         return;
     }
 
-
-    if (true)
-    {
-        birdview::Line global_line, local_line;
-        mpMap->GetMajorLine(global_line);
-        curFrame->GetMajorLine(local_line);
-
-        cv::Point2f gDir = global_line.eP - global_line.sP;
-        cv::Point2f lDir = local_line.eP - local_line.sP;
-
-        float flag = 1.0;
-        if (lDir.y > 0)
-        {
-            flag = -1.0;
-        }
-        
-        float cos_theta = std::fabs(gDir.dot(lDir)) / (cv::norm(gDir) * cv::norm(lDir));
-        float cur_theta = flag * std::acos(cos_theta);
-        float cur_angle =  cur_theta / 3.14 * 180;
-        float gt_angle = curFrame->mGtPose.theta / 3.14 * 180;
-
-        // std::cout << "global_line: " << global_line.sP << " - " << global_line.eP << std::endl;
-        // std::cout << "local_line: " << local_line.sP << " - " << local_line.eP << std::endl;
-        // std::cout << "gDir: " << gDir << std::endl;
-        // std::cout << "lDir: " << lDir << std::endl;
-        // std::cout << "theta: " << theta << std::endl;
-
-        resFile << curFrame->mGtPose.theta << " vs " << cur_theta << " , " << gt_angle << " vs " << cur_angle << " ---- " << " local : sP: " << local_line.sP << " - " << local_line.eP << " , global: " << global_line.sP << " - " << global_line.eP << std::endl;
-    }
-    
-    // std::cout << "cur_pyr: " << curFrame->img_pyr[0].size() << std::endl;
-    // std::cout <<  "last_pyr: " << lastFrame->img_pyr[0].size() << std::endl;
     std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastFrame,curFrame,false);
+    curFrame->setMappoints(kpts1_kpts2.second);
 
-    cv::Mat img_show = _img.clone();
-    std::vector<cv::Point2f> curKeyPt = kpts1_kpts2.second;
-    curFrame->setMappoints(curKeyPt);
-    for(auto kp:curKeyPt)
+    // mpViewer->showKeyPts(_img,kpts1_kpts2.second);
+
+
+    cv::Mat Twc2;
+    if (config::useLineForRotation)
     {
-        cv::circle(img_show, kp, 5, cv::Scalar(0, 240, 0), 1);
+        float cur_theta = mpMap->getRotationViaLine(local_line);
+        Twc2 = poseSolver::FindtICP2D(kpts1_kpts2.first,kpts1_kpts2.second,lastFrame,curFrame,cur_theta);
     }
-    // cv::imshow("corners", curFrame->img_mask);
-    // cv::waitKey(30);
-
-    
-    cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
-    // optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
-    checkT(Tc1c2);
-    cv::Mat Twc = lastFrame->Twc * Tc1c2;
-    curFrame->setTwc(Twc);
+    else
+    {
+        cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
+        // optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
+        // checkT(Tc1c2);
+        Twc2 = lastFrame->Twc * Tc1c2;
+    }
+    curFrame->setTwc(Twc2);
 
     // keyFrame* curKF = new keyFrame(*curFrame);
     // std::cout << "curKF: " << curKF->mnId << std::endl;
     // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
-
     mpMap->addkeyFrame(curFrame);
 
     // viewer
-
 #ifndef macdebugwithoutviewer
     mpViewer->runcore(_idx);
 #endif

@@ -1,14 +1,15 @@
-#include "line.h"
+#include "lineport.h"
 #include "KeyLineGeometry.h"
 #include "optimizer.h"
 #include "FeatureLine.h"
+#include "view.h"
 
 #include <opencv2/opencv.hpp>
 
 static bool isRef = false;
 static cv::Point2f mLastDir;
 
-bool lineport::CalculateMajorLine(Frame* pF)
+bool lineport::CalculateMajorLine(Frame* pF, birdview::Line& MajorLine)
 {
     const float th = cos(M_PI / 4);
     const float th2 = cos(M_PI / 10);
@@ -36,7 +37,7 @@ bool lineport::CalculateMajorLine(Frame* pF)
     cv::Point3f _mline = birdview::KeyLineGeometry::GetKeyLineCoeff(major_line);
     status = std::vector<bool>(vKeyLines.size(), false);
     cv::Point3f infinity(_mline.y, - _mline.x, 0.0);
-    for(int i = 0; i < vKeyLines.size(); i++)
+    for(size_t i = 0; i < vKeyLines.size(); i++)
     {
         float dist = birdview::KeyLineGeometry::GetKeyLineCoeff(vKeyLines[i]).dot(infinity);
         if(fabs(dist) < thDist)
@@ -81,7 +82,7 @@ bool lineport::CalculateMajorLine(Frame* pF)
     birdview::Line l(image_center, image_center + cy * dir);
 
     // convert to XY coordinate
-    birdview::Line MajorLine = birdview::Line(convert::BirdviewPT2XY(l.sP), convert::BirdviewPT2XY(l.eP));
+    MajorLine = birdview::Line(convert::BirdviewPT2XY(l.sP), convert::BirdviewPT2XY(l.eP));
     pF->SetMajorLine(MajorLine);
     // pFrame->SetMajorLine(MajorLine);
 
@@ -94,9 +95,7 @@ bool lineport::CalculateMajorLine(Frame* pF)
     birdview::KeyLineGeometry::DrawLineDirection(keylineImg, line2);
     cv::arrowedLine(keylineImg,l.sP,l.eP,cv::Scalar(0,0,255),4);
 
-    cv::imshow("KeyLines", keylineImg);
-    cv::waitKey(30);
-
+    view::showLines(keylineImg);
     // std::cout << "line::CalculateMajorLine ... " << std::endl;
 
     return true;

@@ -24,6 +24,8 @@ public:
 	static SE2 toSE2(const Eigen::Matrix3d &cvT);
 
 	static cv::Mat tocvMat(const SE2 &se2T);
+	static cv::Mat tocvRMat(float theta);
+	static cv::Mat tocvMat(cv::Point2f &p);
 
 	static Eigen::Matrix3d toMatrix3d(const SE2 &se2T);
 	static Eigen::Matrix4d toMatrix4d(const SE2 &se2T);
@@ -32,4 +34,5 @@ public:
 	static void mat2vector(const cv::Mat &img, std::vector<float> &vimg);
 
 	static cv::Point2f BirdviewPT2XY(const cv::Point2f& pt);
+	static cv::Point2f XY2BirdviewPT(const cv::Point2f& pt);
 };

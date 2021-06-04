@@ -25,6 +25,7 @@ public:
 	void SetMajorLine(const birdview::Line& major_line);
 	bool GetMajorLine(birdview::Line& major_line);
 	
+	float getRotationViaLine(birdview::Line &local_line);
 public:
 	std::vector<Frame*> vFrame;
 	std::vector<keyFrame*> vkeyFrame;

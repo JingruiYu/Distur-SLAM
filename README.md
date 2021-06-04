@@ -17,3 +17,5 @@ v2.4 : pose direct optimization
 v2.5 : check rotation
 
 2.6 : line rotation is calculated.
+
+v2.7 : translation with rotation from line is down.

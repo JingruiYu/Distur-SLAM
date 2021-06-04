@@ -33,6 +33,8 @@ public:
     void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
     void DrawKeyFrame();
     
+    void showKeyPts(cv::Mat& img_show, std::vector<cv::Point2f> &curKeyPt);
+    static void showLines(cv::Mat& img_show);
 public:
 
     map* mpMap;

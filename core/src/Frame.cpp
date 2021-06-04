@@ -14,13 +14,15 @@ Frame::Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv:
 
     mGtPose = SE2(_gtPose[0], _gtPose[1], _gtPose[2]);
 
+    img = _img.clone();
     img_mask = _img_mask.clone();
 
     cv::cvtColor(_img, img_gray, cv::COLOR_RGB2GRAY);
 
+    cv::Mat img_clahe;
     cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(20.0, cv::Size(8, 8));
-    clahe->apply(img_gray, img);
-    cv::buildOpticalFlowPyramid(img, img_pyr, cv::Size(21, 21), 3);
+    clahe->apply(img_gray, img_clahe);
+    cv::buildOpticalFlowPyramid(img_clahe, img_pyr, cv::Size(21, 21), 3);
 
     if (_idx % 7 == 0)
     {

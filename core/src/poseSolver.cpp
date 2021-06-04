@@ -23,22 +23,6 @@ poseSolver::~poseSolver()
 {
 }
 
-cv::Point2f poseSolver::birdPixel2Camera(cv::Point2f pt)
-{
-	cv::Point2f p;
-    p.x = (bRow/2-pt.y)*p2m+rear;
-    p.y = (bCol/2-pt.x)*p2m;
-
-    return p;
-}
-
-cv::Point2f poseSolver::birdCamera2Pixel(cv::Point2f p)
-{
-	cv::Point2f pt;
-    pt.x = bCol/2-p.y*m2p;
-    pt.y = bRow/2-(p.x-rear)*m2p;
-    return pt;
-}
 
 cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > &kpts1_kpts2)
 {
@@ -65,8 +49,8 @@ cv::Mat poseSolver::ICP2D(std::pair<std::vector<cv::Point2f>, std::vector<cv::Po
         // cv::Point2f xyp1(bp1.X,bp1.Y);
         // cv::Point2f xyp2(bp2.X,bp2.Y);
 
-        cv::Point2f xyp11 = birdPixel2Camera(p1);
-        cv::Point2f xyp22 = birdPixel2Camera(p2);
+        cv::Point2f xyp11 = convert::BirdviewPT2XY(p1);
+        cv::Point2f xyp22 = convert::BirdviewPT2XY(p2);
 
         vBpoint1.push_back(xyp11);
         vBpoint2.push_back(xyp22);
@@ -243,4 +227,72 @@ int poseSolver::CheckRtICP2D(const cv::Mat &R, const cv::Mat &t, const std::vect
     }
     // cout<<"Current Inliers = "<<nNumInliers<<"/"<<N<<endl; 
     return nNumInliers;
+}
+
+cv::Mat poseSolver::FindtICP2D(const std::vector<cv::Point2f> &vKeys1, const std::vector<cv::Point2f> &vKeys2, Frame* lastFrame, Frame* curFrame, float cur_theta)
+{
+    cv::Mat Twc1 = lastFrame->Twc.clone();
+    cv::Mat Rwc1 = Twc1.rowRange(0,2).colRange(0,2);
+    cv::Mat twc1 = Twc1.rowRange(0,2).col(2);
+
+    cv::Mat Twc2 = cv::Mat::eye(3,3,CV_32F);
+    cv::Mat Rwc2 = convert::tocvRMat(cur_theta);
+    cv::Mat twc2 = cv::Mat::zeros(2,1,CV_32F);
+    cv::Mat Tc2w = cv::Mat::eye(3,3,CV_32F);
+    cv::Mat Rc2w = Rwc2.inv();
+    cv::Mat tc2w = cv::Mat::zeros(2,1,CV_32F);
+    
+    int N = vKeys1.size();
+    std::vector<cv::Mat> vPc1inc2, vPc2;
+    for (int i = 0; i < N; i++)
+    {
+        cv::Point2f p1 = vKeys1[i];
+        cv::Point2f p2 = vKeys2[i];
+
+        cv::Point2f pc1 = convert::BirdviewPT2XY(p1);
+        cv::Point2f pc2 = convert::BirdviewPT2XY(p2);
+
+        cv::Mat pc1m = convert::tocvMat(pc1);
+        cv::Mat pc2m = convert::tocvMat(pc2);
+
+        cv::Mat pw1 = Rwc1 * pc1m + twc1;
+        cv::Mat p1inc2 = Rc2w * pw1;
+
+        vPc1inc2.push_back(p1inc2);
+        vPc2.push_back(pc2m);
+    }
+
+    cv::Mat vCentor1 = cv::Mat::zeros(2,1,CV_32F);
+    cv::Mat vCentor2 = cv::Mat::zeros(2,1,CV_32F);
+
+    for (int i = 0; i < N; i++)
+    {
+        vCentor1.at<float>(0) += vPc1inc2[i].at<float>(0);
+        vCentor1.at<float>(1) += vPc1inc2[i].at<float>(1);
+
+        vCentor2.at<float>(0) += vPc2[i].at<float>(0);
+        vCentor2.at<float>(1) += vPc2[i].at<float>(1);
+    }
+    
+    vCentor1.at<float>(0) = vCentor1.at<float>(0) / N;
+    vCentor1.at<float>(1) = vCentor1.at<float>(1) / N;
+    vCentor2.at<float>(0) = vCentor2.at<float>(0) / N;
+    vCentor2.at<float>(1) = vCentor2.at<float>(1) / N;
+
+    tc2w.at<float>(0) = vCentor2.at<float>(0) - vCentor1.at<float>(0);
+    tc2w.at<float>(1) = vCentor2.at<float>(1) - vCentor1.at<float>(1);
+
+    Rc2w.copyTo(Tc2w.rowRange(0,2).colRange(0,2));
+    tc2w.copyTo(Tc2w.rowRange(0,2).col(2));
+    Twc2 = Tc2w.inv();
+
+    // std::cout << "Tc2w : "<< std::endl << Tc2w << std::endl;
+    // std::cout << "Rc2w : "<< std::endl << Rc2w << std::endl;
+    // std::cout << "tc2w : "<< std::endl << tc2w << std::endl;
+
+    // std::cout << "Twc2 : "<< std::endl << Twc2 << std::endl;
+    // std::cout << "Rwc2 : "<< std::endl << Rwc2 << std::endl;
+    // std::cout << "twc2 : "<< std::endl << twc2 << std::endl;
+
+    return Twc2;
 }

@@ -59,6 +59,31 @@ cv::Mat convert::tocvMat(const SE2 &se2T)
     return m;
 }
 
+cv::Mat convert::tocvRMat(float theta)
+{
+    cv::Mat m = cv::Mat::eye(2,2,CV_32F);
+
+    double c = cos(theta);
+    double s = sin(theta);
+
+    m.at<float>(0,0) = c;
+    m.at<float>(0,1) = -s;
+    m.at<float>(1,0) = s;
+    m.at<float>(1,1) = c;
+
+    return m;
+}
+
+cv::Mat convert::tocvMat(cv::Point2f &p)
+{
+    cv::Mat m = cv::Mat::zeros(2,1,CV_32F);
+
+    m.at<float>(0) = p.x;
+    m.at<float>(1) = p.y;
+
+    return m;
+}
+
 Eigen::Matrix3d convert::toMatrix3d(const SE2 &se2T)
 {
 	double c = cos(se2T.theta);
@@ -102,9 +127,9 @@ void convert::mat2vector(const cv::Mat &img, std::vector<float> &vimg)
     int rows = img.rows;
     int cols = img.cols;
 
-    for (size_t c = 0; c < cols; c++)
+    for (int c = 0; c < cols; c++)
     {
-        for (size_t r = 0; r < rows; r++)
+        for (int r = 0; r < rows; r++)
         {
             vimg.push_back(img.at<u_char>(r,c));
         }
@@ -118,4 +143,13 @@ cv::Point2f convert::BirdviewPT2XY(const cv::Point2f &kp)
     p.y = (config::birdviewCols/2.0-kp.x)*config::pixel2meter;
 
     return p;
+}
+
+cv::Point2f convert::XY2BirdviewPT(const cv::Point2f& p)
+{
+	cv::Point2f pt;
+    pt.x = config::birdviewCols/2-p.y*config::meter2pixel;
+    pt.y = config::birdviewRows/2-(p.x-config::rear_axle_to_center)*config::meter2pixel;
+
+    return pt;
 }
