@@ -24,6 +24,7 @@ public:
                 			const std::vector<cv::DMatch> &vMatches12, std::vector<bool> &vbMatchesInliers, float sigma);
 
 	static cv::Mat FindtICP2D(const std::vector<cv::Point2f> &vKeysXY1, const std::vector<cv::Point2f> &vKeysXY2, Frame* lastFrame, Frame* curFrame, float cur_theta);
+	static cv::Mat FindtByLinePt(Frame* refFrame, Frame* curFrame, float cur_theta);
 
 public:
 	static const float bRow;

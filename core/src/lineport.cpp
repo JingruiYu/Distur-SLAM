@@ -47,6 +47,8 @@ bool lineport::CalculateMajorLine(Frame* pF, birdview::Line& MajorLine)
     }
     optimizer::OptimizeMajorLine(vKeyLines,status,_mline);
 
+    pF->setKeyLines(vKeyLines,status);
+
     cv::Point2f dir(_mline.y, - _mline.x);
     if(!isRef)
     {

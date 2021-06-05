@@ -9,7 +9,7 @@
 
 int keyFrame::mnNextId = 0;
 
-keyFrame::keyFrame (const Frame & pF) : Frame(pF)
+keyFrame::keyFrame (Frame* pF) : mpF(pF)
 {
 	mnId = mnNextId++; 
 }

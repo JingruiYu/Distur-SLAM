@@ -10,6 +10,7 @@
 #include "SE2.h"
 #include "convert.h"
 #include "FeatureLine.h"
+#include "LineExtractor.h"
 #include "config.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -27,6 +28,9 @@ public:
 	
 	bool GetMajorLine(birdview::Line& line) const;
     void SetMajorLine(const birdview::Line& line);
+	void setKeyLines(std::vector<KeyLine>& _vKeyLines, std::vector<bool>& _status);
+	std::vector<cv::Point2f> getMiddlePtFromLine();
+	std::vector<cv::Point2f> getEndPtFromLine();
 
 public:
 	cv::Mat img;
@@ -75,6 +79,8 @@ public:
 
 	std::vector<cv::Point2f> vPoint2fs;
 	std::vector<bpoint> vbPoints;
+
+	std::vector<KeyLine> vKeyLines;
 
 	int idx;
 	double timestamp;

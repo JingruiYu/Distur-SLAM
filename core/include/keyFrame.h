@@ -9,15 +9,15 @@
 
 #include "Frame.h"
 
-class keyFrame : public Frame
+class keyFrame
 {
 public:
-	keyFrame (const Frame & pF);
+	keyFrame (Frame* pF);
 	~keyFrame ();
 
 public:
 	int mnId;
 	static int mnNextId;
-	
+	Frame* mpF;
 };
 

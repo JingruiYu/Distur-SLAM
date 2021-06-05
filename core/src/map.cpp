@@ -22,7 +22,7 @@ void map::addFrame(Frame* pF)
 
 void map::addkeyFrame(Frame* pF)
 {
-	keyFrame* pKF = new keyFrame(*pF);
+	keyFrame* pKF = new keyFrame(pF);
 
 	vkeyFrame.push_back(pKF);
 }

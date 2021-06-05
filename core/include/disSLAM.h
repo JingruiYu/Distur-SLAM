@@ -10,6 +10,7 @@
 
 #include "map.h"
 #include "Frame.h"
+#include "keyFrame.h"
 #include "tracking.h"
 #include "poseSolver.h"
 #include "view.h"
@@ -34,8 +35,11 @@ public:
 public:
     Frame *curFrame  = nullptr;
     Frame *lastFrame = nullptr;
+    keyFrame *lastKF = nullptr;
     view *mpViewer = nullptr;
     map *mpMap = nullptr;
+
+    int cKF = 0;
 
     std::ofstream resFile;
 

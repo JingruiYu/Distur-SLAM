@@ -242,45 +242,51 @@ cv::Mat poseSolver::FindtICP2D(const std::vector<cv::Point2f> &vKeys1, const std
     cv::Mat Rc2w = Rwc2.inv();
     cv::Mat tc2w = cv::Mat::zeros(2,1,CV_32F);
     
-    int N = vKeys1.size();
+    int N1 = vKeys1.size();
+    int N2 = vKeys2.size();
     std::vector<cv::Mat> vPc1inc2, vPc2;
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < N1; i++)
     {
         cv::Point2f p1 = vKeys1[i];
-        cv::Point2f p2 = vKeys2[i];
-
         cv::Point2f pc1 = convert::BirdviewPT2XY(p1);
-        cv::Point2f pc2 = convert::BirdviewPT2XY(p2);
-
         cv::Mat pc1m = convert::tocvMat(pc1);
-        cv::Mat pc2m = convert::tocvMat(pc2);
-
         cv::Mat pw1 = Rwc1 * pc1m + twc1;
         cv::Mat p1inc2 = Rc2w * pw1;
 
         vPc1inc2.push_back(p1inc2);
-        vPc2.push_back(pc2m);
     }
 
+    for (int i = 0; i < N2; i++)
+    {
+        cv::Point2f p2 = vKeys2[i];
+        cv::Point2f pc2 = convert::BirdviewPT2XY(p2);
+        cv::Mat pc2m = convert::tocvMat(pc2);
+        vPc2.push_back(pc2m);
+    }
+    
     cv::Mat vCentor1 = cv::Mat::zeros(2,1,CV_32F);
     cv::Mat vCentor2 = cv::Mat::zeros(2,1,CV_32F);
 
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < N1; i++)
     {
         vCentor1.at<float>(0) += vPc1inc2[i].at<float>(0);
         vCentor1.at<float>(1) += vPc1inc2[i].at<float>(1);
+    }
 
+    for (int i = 0; i < N2; i++)
+    {
         vCentor2.at<float>(0) += vPc2[i].at<float>(0);
         vCentor2.at<float>(1) += vPc2[i].at<float>(1);
     }
     
-    vCentor1.at<float>(0) = vCentor1.at<float>(0) / N;
-    vCentor1.at<float>(1) = vCentor1.at<float>(1) / N;
-    vCentor2.at<float>(0) = vCentor2.at<float>(0) / N;
-    vCentor2.at<float>(1) = vCentor2.at<float>(1) / N;
+    vCentor1.at<float>(0) = vCentor1.at<float>(0) / N1;
+    vCentor1.at<float>(1) = vCentor1.at<float>(1) / N1;
+    vCentor2.at<float>(0) = vCentor2.at<float>(0) / N2;
+    vCentor2.at<float>(1) = vCentor2.at<float>(1) / N2;
 
-    tc2w.at<float>(0) = vCentor2.at<float>(0) - vCentor1.at<float>(0);
-    tc2w.at<float>(1) = vCentor2.at<float>(1) - vCentor1.at<float>(1);
+    float scale = 1;
+    tc2w.at<float>(0) = scale*(vCentor2.at<float>(0) - vCentor1.at<float>(0));
+    tc2w.at<float>(1) = scale*(vCentor2.at<float>(1) - vCentor1.at<float>(1));
 
     Rc2w.copyTo(Tc2w.rowRange(0,2).colRange(0,2));
     tc2w.copyTo(Tc2w.rowRange(0,2).col(2));
@@ -293,6 +299,28 @@ cv::Mat poseSolver::FindtICP2D(const std::vector<cv::Point2f> &vKeys1, const std
     // std::cout << "Twc2 : "<< std::endl << Twc2 << std::endl;
     // std::cout << "Rwc2 : "<< std::endl << Rwc2 << std::endl;
     // std::cout << "twc2 : "<< std::endl << twc2 << std::endl;
+
+    return Twc2;
+}
+
+cv::Mat poseSolver::FindtByLinePt(Frame* refFrame, Frame* curFrame, float cur_theta)
+{
+    std::vector<cv::Point2f> vKeys1 = refFrame->getEndPtFromLine();
+    std::vector<cv::Point2f> vKeys2 = curFrame->getEndPtFromLine();
+
+    if (vKeys1.size() < 5 || vKeys2.size() < 5)
+    {
+        std::cout << "poseSolver::FindtByLinePt getchar() " << std::endl;
+        std::cin.get();
+    }
+    
+    // std::cout << "vKeys1: " << vKeys1.size() << " - vKeys2: " << vKeys2.size() << std::endl;
+    std::vector<cv::Point2f> vKeys2OF;
+    std::vector<uchar> status1;
+	std::vector<float> errs1;
+    cv::calcOpticalFlowPyrLK(refFrame->img_gray,curFrame->img_gray,vKeys1,vKeys2OF,status1,errs1,cv::Size(21,21),3);
+
+    cv::Mat Twc2 = poseSolver::FindtICP2D(vKeys1, vKeys2OF, refFrame, curFrame, cur_theta);
 
     return Twc2;
 }

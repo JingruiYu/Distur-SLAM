@@ -163,7 +163,7 @@ void view::DrawKeyFrame()
     {
         // std::cout << "pKF: " << pKF->idx << std::endl;
         // Eigen::Matrix4d Twc = convert::toMatrix4d(pKF->Twc);
-        Eigen::Matrix4d Twc = pKF->mGtPose.toMatrix4d();
+        Eigen::Matrix4d Twc = pKF->mpF->mGtPose.toMatrix4d();
 
         glPushMatrix();
         glMultMatrixd(Twc.data());
@@ -193,8 +193,8 @@ void view::DrawKeyFrame()
     glBegin(GL_LINES);
     for(size_t i = 1; i < vkeyFrameAll.size(); i++)
     {
-        Eigen::Vector3d begin = convert::toMatrix4d(vkeyFrameAll[i-1]->Twc).topRightCorner(3, 1);
-        Eigen::Vector3d end = convert::toMatrix4d(vkeyFrameAll[i]->Twc).topRightCorner(3, 1);
+        Eigen::Vector3d begin = convert::toMatrix4d(vkeyFrameAll[i-1]->mpF->Twc).topRightCorner(3, 1);
+        Eigen::Vector3d end = convert::toMatrix4d(vkeyFrameAll[i]->mpF->Twc).topRightCorner(3, 1);
         glVertex3f(begin[0], begin[1], begin[2]);
         glVertex3f(end[0], end[1], end[2]);
     }

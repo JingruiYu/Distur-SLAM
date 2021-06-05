@@ -77,3 +77,59 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::LK(Fram
 	
 	return std::make_pair(vPs, vQs);
 }
+
+std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::FeatureORB(Frame* refFrame, Frame* curFrame)
+{
+	cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create();
+    cv::Ptr<cv::DescriptorExtractor> descriptor = cv::ORB::create();
+	cv::Ptr<cv::DescriptorMatcher> matcher  = cv::DescriptorMatcher::create("BruteForce-Hamming");
+
+	cv::Mat img_1 = refFrame->img_gray;
+	cv::Mat img_2 = curFrame->img_gray;
+	std::vector<cv::KeyPoint> keypoints_1;
+	std::vector<cv::KeyPoint> keypoints_2;
+	cv::Mat descriptors_1, descriptors_2;
+
+	detector->detect ( img_1,keypoints_1 );
+    detector->detect ( img_2,keypoints_2 );
+
+	descriptor->compute ( img_1, keypoints_1, descriptors_1 );
+    descriptor->compute ( img_2, keypoints_2, descriptors_2 );
+
+    std::vector<cv::DMatch> match, matches;
+    matcher->match ( descriptors_1, descriptors_2, match );
+
+    double min_dist=10000, max_dist=0;
+
+    for ( int i = 0; i < descriptors_1.rows; i++ )
+    {
+        double dist = match[i].distance;
+        if ( dist < min_dist ) min_dist = dist;
+        if ( dist > max_dist ) max_dist = dist;
+    }
+
+    for ( int i = 0; i < descriptors_1.rows; i++ )
+    {
+        if ( match[i].distance <= std::max( 2*min_dist, 30.0 ) )
+        {
+            matches.push_back ( match[i] );
+        }
+    }
+
+	std::vector<cv::Point2f> vPs;
+	std::vector<cv::Point2f> vQs;
+	for (size_t i = 0; i < matches.size(); i++)
+	{
+		cv::DMatch imatch = matches[i];
+		vPs.push_back(keypoints_1[imatch.queryIdx].pt);
+		vQs.push_back(keypoints_2[imatch.trainIdx].pt);
+	}
+	
+	if (vPs.size() < 10)
+	{
+		std::cout << "in FeatureORB, the final vPs is less than 4 " << std::endl;
+        return std::make_pair(std::vector<cv::Point2f>(), std::vector<cv::Point2f>());
+	}
+
+	return std::make_pair(vPs, vQs);
+}

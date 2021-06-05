@@ -112,3 +112,56 @@ void Frame::SetMajorLine(const birdview::Line& line)
     mMajorLine = line;
     mbIsMajorLineSet = true;
 }
+
+void Frame::setKeyLines(std::vector<KeyLine>& _vKeyLines, std::vector<bool>& _status)
+{
+    int N = _vKeyLines.size();
+    vKeyLines.clear();
+
+    for (int i = 0; i < N; i++)
+    {
+        if (_status[i])
+        {
+            vKeyLines.push_back(_vKeyLines[i]);
+        }
+    }
+    
+    // std::cout << "_vKeyLines.size(): " << _vKeyLines.size() << " - " << _status.size() << " - " << vKeyLines.size() << std::endl;
+    
+    return;
+}
+
+std::vector<cv::Point2f> Frame::getMiddlePtFromLine()
+{
+    std::vector<cv::Point2f> vMidddlePts;
+
+    for (size_t i = 0; i < vKeyLines.size(); i++)
+    {
+        cv::Point2f npt= vKeyLines[i].pt;
+        if (npt.x < 0 || npt.y < 0 || npt.x > 384 || npt.y > 384)
+        {
+            std::cout << "npt: " << npt << std::endl;
+            std::cin.get();
+        }
+        
+        vMidddlePts.push_back(npt);
+    }
+    
+    return vMidddlePts;
+}
+
+std::vector<cv::Point2f> Frame::getEndPtFromLine()
+{
+    std::vector<cv::Point2f> vEndPts;
+
+    for (size_t i = 0; i < vKeyLines.size(); i++)
+    {
+        cv::Point2f spt(vKeyLines[i].startPointX, vKeyLines[i].startPointY);
+        cv::Point2f ept(vKeyLines[i].endPointX, vKeyLines[i].endPointY);
+        
+        vEndPts.push_back(spt);
+        vEndPts.push_back(ept);
+    }
+    
+    return vEndPts;
+}

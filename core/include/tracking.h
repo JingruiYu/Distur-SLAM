@@ -19,5 +19,6 @@ public:
 	~tracking();
 
 	static std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > LK(Frame* refFrame, Frame* curFrame, bool doubleCheck);
+	static std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > FeatureORB(Frame* refFrame, Frame* curFrame);
 };
 

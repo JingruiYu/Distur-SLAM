@@ -14,6 +14,7 @@ public:
     static const float rear_axle_to_center;
     static const float vehicle_length;
     static const float vehicle_width;
+    static const float correction;
 
     static bool useLineForRotation;
 };

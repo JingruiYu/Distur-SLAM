@@ -39,7 +39,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     birdview::Line local_line;
     lineport::CalculateMajorLine(curFrame,local_line);
 
-    if (!lastFrame)
+    if (!lastKF)
     {
         cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
         curFrame->setTwc(Twc);
@@ -50,10 +50,14 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
 
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
+        lastKF = new keyFrame(curFrame);
         return;
     }
 
-    std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastFrame,curFrame,false);
+    // std::cout << "curFrame Id: " << curFrame->idx << ", lastKF frame Id: " << lastKF->mpF->idx << ", KF Id: " << lastKF->mnId << std::endl;
+
+    std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastKF->mpF,curFrame,true);
+    // std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::FeatureORB(lastKF->mpF,curFrame);
     curFrame->setMappoints(kpts1_kpts2.second);
 
     // mpViewer->showKeyPts(_img,kpts1_kpts2.second);
@@ -63,21 +67,26 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     if (config::useLineForRotation)
     {
         float cur_theta = mpMap->getRotationViaLine(local_line);
-        Twc2 = poseSolver::FindtICP2D(kpts1_kpts2.first,kpts1_kpts2.second,lastFrame,curFrame,cur_theta);
+        // Twc2 = poseSolver::FindtICP2D(kpts1_kpts2.first,kpts1_kpts2.second,lastKF->mpF,curFrame,cur_theta);
+
+        cv::Mat Twc2y;
+        Twc2 = poseSolver::FindtByLinePt(lastKF->mpF, curFrame, cur_theta);
+        // std::cout << "Twc2: " << std::endl << Twc2 << " , Twc2y: " << std::endl << Twc2y << std::endl;
     }
     else
     {
         cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
-        // optimizer::FrameDirectOptimization(lastFrame, curFrame, Tc1c2);
+        // optimizer::FrameDirectOptimization(lastKF->mpF, curFrame, Tc1c2);
         // checkT(Tc1c2);
-        Twc2 = lastFrame->Twc * Tc1c2;
+        Twc2 = lastKF->mpF->Twc * Tc1c2;
     }
     curFrame->setTwc(Twc2);
 
     // keyFrame* curKF = new keyFrame(*curFrame);
     // std::cout << "curKF: " << curKF->mnId << std::endl;
     // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
-    mpMap->addkeyFrame(curFrame);
+    // mpMap->addkeyFrame(curFrame);
+    
 
     // viewer
 #ifndef macdebugwithoutviewer
@@ -85,6 +94,18 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
 #endif
 
     lastFrame = curFrame;
+
+    if (cKF == 0)
+    {
+        cKF = 0;
+        lastKF = new keyFrame(curFrame);
+        mpMap->addkeyFrame(lastKF);
+    }
+    else
+    {
+        cKF++;
+    }
+    
     return;
 }
 
