@@ -53,8 +53,6 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
             curFrame->GetMajorLine(major_line);
             mpMap->SetMajorLine(major_line);
         }
-        
-        
 
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
@@ -69,6 +67,7 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     {
         float cur_theta = mpMap->getRotationViaLine(local_line);
         // Twc2 = poseSolver::FindtICP2D(kpts1_kpts2.first,kpts1_kpts2.second,lastKF->mpF,curFrame,cur_theta);
+
         Twc2 = poseSolver::FindtByLinePt(lastKF->mpF, curFrame, cur_theta);
     }
     else // feature points
@@ -86,12 +85,25 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     }
     curFrame->setTwc(Twc2);
 
+    if (false)
+    {
+        cv::Mat gtTwc1 = convert::tocvMat(lastKF->mpF->mGtPose);
+        cv::Mat gtTcc = gtTwc1.inv() * convert::tocvMat(curFrame->mGtPose);
+        
+        cv::Mat elTcc = lastKF->mpF->Twc.inv() * Twc2;
+
+        SE2 gtse = convert::toSE2(gtTcc);
+        SE2 lise = convert::toSE2(elTcc);
+
+        resFile << _idx << std::endl;
+        resFile << "gtse: " << gtse.x << " - " << gtse.y << " - " << gtse.theta << std::endl;
+        resFile << "lise: " << lise.x << " - " << lise.y << " - " << lise.theta << std::endl << std::endl;
+    }
     // keyFrame* curKF = new keyFrame(*curFrame);
     // std::cout << "curKF: " << curKF->mnId << std::endl;
     // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
     // mpMap->addkeyFrame(curFrame);
     
-
     // viewer
 #ifndef macdebugwithoutviewer
     mpViewer->runcore(_idx);

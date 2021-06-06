@@ -217,3 +217,42 @@ void view::showLines(cv::Mat& img_show)
     cv::imshow("KeyLines", img_show);
     cv::waitKey(30);
 }
+
+void view::showLinePts(int idx, cv::Mat& refImg, cv::Mat& curImg, std::vector<cv::Point2f> &refLintPt, 
+                        std::vector<cv::Point2f> &trackRefLintPt, std::vector<cv::Point2f> &curLintPt)
+{
+    // std::cout << "view::showLinePts... " << std::endl;
+    cv::Mat ref_img = refImg.clone();
+    cv::Mat cur_img = curImg.clone();
+
+    for(auto kp:refLintPt)
+    {
+        cv::circle(ref_img, kp, 2, cv::Scalar(0, 240, 0), 1);
+    }
+
+    const float r = 5;
+    for(auto kp:trackRefLintPt)
+    {
+        cv::Point2f pt1,pt2;
+        pt1.x=kp.x-r;
+        pt1.y=kp.y-r;
+        pt2.x=kp.x+r;
+        pt2.y=kp.y+r;
+
+        cv::rectangle(cur_img,pt1,pt2,cv::Scalar(0,0,255));
+    }
+
+    for(auto kp:curLintPt)
+    {
+        cv::circle(cur_img, kp, 2, cv::Scalar(255,0,0), -1);
+        // cv::circle(cur_img, kp, 2, cv::Scalar(0, 240, 0), 1);
+    }
+
+    // std::string writeFolder = "/home/yujr/Distur-SLAM/core/linePt/";
+    // cv::imwrite(writeFolder+std::to_string(idx)+"_aref.png",ref_img);
+    // cv::imwrite(writeFolder+std::to_string(idx)+"_ccur.png",cur_img);
+
+    cv::imshow("ref_img", ref_img);
+    cv::imshow("cur_img", cur_img);
+    cv::waitKey(30);
+}

@@ -7,6 +7,7 @@
 
 #include "poseSolver.h"
 #include "Frame.h"
+#include "view.h"
 
 const float poseSolver::bRow = 384.0;
 const float poseSolver::bCol = 384.0;
@@ -308,19 +309,41 @@ cv::Mat poseSolver::FindtByLinePt(Frame* refFrame, Frame* curFrame, float cur_th
     std::vector<cv::Point2f> vKeys1 = refFrame->getEndPtFromLine();
     std::vector<cv::Point2f> vKeys2 = curFrame->getEndPtFromLine();
 
-    if (vKeys1.size() < 5 || vKeys2.size() < 5)
+    // std::cout << "vKeys1: " << vKeys1.size() << " - vKeys2: " << vKeys2.size() << std::endl;
+    std::vector<cv::Point2f> vKeys1OF;
+    std::vector<cv::Point2f> vKeys2OF;
+    std::vector<uchar> status;
+	std::vector<float> errs;
+
+    if (vKeys1.size() >= vKeys2.size())
     {
-        std::cout << "poseSolver::FindtByLinePt getchar() " << std::endl;
-        std::cin.get();
+        // std::cout << "poseSolver::FindtByLinePt --- 1 " << std::endl;
+        vKeys1OF = vKeys1;
+        cv::calcOpticalFlowPyrLK(refFrame->img_gray,curFrame->img_gray,vKeys1OF,vKeys2OF,status,errs,cv::Size(21,21),3);
+    }
+    else
+    {
+        // std::cout << "poseSolver::FindtByLinePt --- 2 " << std::endl;
+        vKeys2OF = vKeys2;
+        cv::calcOpticalFlowPyrLK(curFrame->img_gray,refFrame->img_gray,vKeys2OF,vKeys1OF,status,errs,cv::Size(21,21),3);
     }
     
-    // std::cout << "vKeys1: " << vKeys1.size() << " - vKeys2: " << vKeys2.size() << std::endl;
-    std::vector<cv::Point2f> vKeys2OF;
-    std::vector<uchar> status1;
-	std::vector<float> errs1;
-    cv::calcOpticalFlowPyrLK(refFrame->img_gray,curFrame->img_gray,vKeys1,vKeys2OF,status1,errs1,cv::Size(21,21),3);
+    std::vector<cv::Point2f> vKeysRef, vKeysCur;
+    for (size_t i = 0; i < status.size(); i++)
+    {
+        if (status[i])
+        {
+            cv::Point2f p1 = vKeys1OF[i];
+            cv::Point2f p2 = vKeys2OF[i];
 
-    cv::Mat Twc2 = poseSolver::FindtICP2D(vKeys1, vKeys2OF, refFrame, curFrame, cur_theta);
+            vKeysRef.push_back(p1);
+            vKeysCur.push_back(p2);
+        }   
+    }
+
+    cv::Mat Twc2 = poseSolver::FindtICP2D(vKeysRef, vKeysCur, refFrame, curFrame, cur_theta);
+
+    // view::showLinePts(curFrame->idx, refFrame->img,curFrame->img,vKeys1,vKeys2OF,vKeys2);
 
     return Twc2;
 }

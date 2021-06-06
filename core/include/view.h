@@ -35,6 +35,8 @@ public:
     
     void showKeyPts(cv::Mat& img_show, std::vector<cv::Point2f> &curKeyPt);
     static void showLines(cv::Mat& img_show);
+    static void showLinePts(int idx, cv::Mat& refImg, cv::Mat& curImg, std::vector<cv::Point2f> &refLintPt, 
+                            std::vector<cv::Point2f> &trackRefLintPt, std::vector<cv::Point2f> &curLintPt);
 public:
 
     map* mpMap;

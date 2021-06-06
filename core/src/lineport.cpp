@@ -24,7 +24,15 @@ bool lineport::CalculateMajorLine(Frame* pF, birdview::Line& MajorLine)
     // // extract lsd lines
     LineExtractorPtr mpLineExtractor = std::make_shared<LineExtractor>();
     std::vector<KeyLine> vKeyLines;
-    mpLineExtractor->extractLines(imageRaw, vKeyLines, imageMask);
+
+    cv::Mat imgEnd;
+    imageRaw.copyTo(imgEnd,imageMask);
+    // cv::imshow("imageRaw",imageRaw);
+    // cv::imshow("imageMask",imageMask);
+    // cv::imshow("imgEnd",imgEnd);
+    // cv::waitKey(30);
+
+    mpLineExtractor->extractLines(imgEnd, vKeyLines);
     // std::cout << "vKeyLines: " << vKeyLines.size() << std::endl;
 
     // find major direction from lsd lines
