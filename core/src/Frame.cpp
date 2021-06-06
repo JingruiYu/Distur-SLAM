@@ -43,8 +43,9 @@ bool Frame::extractFastPoint()
     }
     
     cv::Mat img_mask_gray;
-    cv::cvtColor(img_mask, img_mask_gray, cv::COLOR_RGB2GRAY);
-
+    // cv::cvtColor(img_mask, img_mask_gray, cv::COLOR_RGB2GRAY);
+    img_mask_gray = img_mask.clone();
+    
     cv::goodFeaturesToTrack(img_gray,vPoint2fs,100,0.01,5.0,img_mask_gray);
 
     // std::cout << "vPoint2fs: " << vPoint2fs.size() << std::endl;

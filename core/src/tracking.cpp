@@ -84,14 +84,16 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::Feature
     cv::Ptr<cv::DescriptorExtractor> descriptor = cv::ORB::create();
 	cv::Ptr<cv::DescriptorMatcher> matcher  = cv::DescriptorMatcher::create("BruteForce-Hamming");
 
-	cv::Mat img_1 = refFrame->img_gray;
-	cv::Mat img_2 = curFrame->img_gray;
+	cv::Mat mask1 = refFrame->img_mask.clone();
+	cv::Mat mask2 = curFrame->img_mask.clone();
+	cv::Mat img_1 = refFrame->img.clone();
+	cv::Mat img_2 = curFrame->img.clone();
 	std::vector<cv::KeyPoint> keypoints_1;
 	std::vector<cv::KeyPoint> keypoints_2;
 	cv::Mat descriptors_1, descriptors_2;
 
-	detector->detect ( img_1,keypoints_1 );
-    detector->detect ( img_2,keypoints_2 );
+	detector->detect ( img_1,keypoints_1,mask1 );
+    detector->detect ( img_2,keypoints_2,mask2 );
 
 	descriptor->compute ( img_1, keypoints_1, descriptors_1 );
     descriptor->compute ( img_2, keypoints_2, descriptors_2 );
@@ -127,7 +129,7 @@ std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > tracking::Feature
 	
 	if (vPs.size() < 10)
 	{
-		std::cout << "in FeatureORB, the final vPs is less than 4 " << std::endl;
+		std::cout << "in FeatureORB, the final vPs is less than 10 " << std::endl;
         return std::make_pair(std::vector<cv::Point2f>(), std::vector<cv::Point2f>());
 	}
 

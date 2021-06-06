@@ -37,16 +37,24 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
 {
     curFrame = new Frame(_idx, _img, _img_mask, _timestamp, _gtPose);
     birdview::Line local_line;
-    lineport::CalculateMajorLine(curFrame,local_line);
-
+    if (config::useLineForRotation)
+    {
+        lineport::CalculateMajorLine(curFrame,local_line);
+    }
+    
     if (!lastKF)
     {
         cv::Mat Twc = cv::Mat::eye(3,3,CV_32FC1);
         curFrame->setTwc(Twc);
 
-        birdview::Line major_line;
-        curFrame->GetMajorLine(major_line);
-        mpMap->SetMajorLine(major_line);
+        if (config::useLineForRotation)
+        {
+            birdview::Line major_line;
+            curFrame->GetMajorLine(major_line);
+            mpMap->SetMajorLine(major_line);
+        }
+        
+        
 
         mpMap->addFrame(curFrame);
         lastFrame = curFrame;
@@ -56,25 +64,21 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
 
     // std::cout << "curFrame Id: " << curFrame->idx << ", lastKF frame Id: " << lastKF->mpF->idx << ", KF Id: " << lastKF->mnId << std::endl;
 
-    std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::LK(lastKF->mpF,curFrame,true);
-    // std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2 = tracking::FeatureORB(lastKF->mpF,curFrame);
-    curFrame->setMappoints(kpts1_kpts2.second);
-
-    // mpViewer->showKeyPts(_img,kpts1_kpts2.second);
-
-
     cv::Mat Twc2;
-    if (config::useLineForRotation)
+    if (config::useLineForRotation) // lines
     {
         float cur_theta = mpMap->getRotationViaLine(local_line);
         // Twc2 = poseSolver::FindtICP2D(kpts1_kpts2.first,kpts1_kpts2.second,lastKF->mpF,curFrame,cur_theta);
-
-        cv::Mat Twc2y;
         Twc2 = poseSolver::FindtByLinePt(lastKF->mpF, curFrame, cur_theta);
-        // std::cout << "Twc2: " << std::endl << Twc2 << " , Twc2y: " << std::endl << Twc2y << std::endl;
     }
-    else
+    else // feature points
     {
+        std::pair<std::vector<cv::Point2f>, std::vector<cv::Point2f> > kpts1_kpts2;
+        kpts1_kpts2 = tracking::LK(lastKF->mpF,curFrame,true);
+        // kpts1_kpts2 = tracking::FeatureORB(lastKF->mpF,curFrame);
+        curFrame->setMappoints(kpts1_kpts2.second);
+        mpViewer->showKeyPts(_img,kpts1_kpts2.second);
+
         cv::Mat Tc1c2 = poseSolver::ICP2D(kpts1_kpts2);
         // optimizer::FrameDirectOptimization(lastKF->mpF, curFrame, Tc1c2);
         // checkT(Tc1c2);
