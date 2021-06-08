@@ -173,3 +173,43 @@ protected:
 
     double a,b;
 };
+
+class PoseGraph2dError
+{
+public:
+    PoseGraph2dError(double _x_ab, double _y_ab, double _yaw_ab_rad,
+                    const Eigen::Matrix3d& _sqrt_info)
+                    : p_ab(_x_ab,_y_ab), yaw_ab_rad(_yaw_ab_rad),
+                      sqrt_info(_sqrt_info) {}
+
+    template <typename T>
+    bool operator()(const T* const x_a, const T* const y_a, const T* const yaw_a,
+                    const T* const x_b, const T* const y_b, const T* const yaw_b, 
+                    T* residuals_ptr) const
+    {
+        const Eigen::Matrix<T,2,1> p_a(*x_a, *y_a);
+        const Eigen::Matrix<T,2,1> p_b(*x_b, *y_b);
+        Eigen::Map<Eigen::Matrix<T,3,1> > residuals_map(residuals_ptr);
+
+        residuals_map.template head<2>() = to2DRotationMatrix(*yaw_a).transpose() 
+                                            * (p_b - p_a) - p_ab.cast<T>();
+        residuals_map(2) = NormalizeAngle( (*yaw_b - *yaw_a) - static_cast<T>(yaw_ab_rad));
+
+        residuals_map = sqrt_info.template cast<T>() * residuals_map;
+
+        return true;
+    }
+
+    static ceres::CostFunction* Create(double x_ab, double y_ab, double yaw_ab_rad,
+                                        const Eigen::Matrix3d& sqrt_info)
+    {
+        return (new ceres::AutoDiffCostFunction<PoseGraph2dError,3,1,1,1,1,1,1>(new PoseGraph2dError(x_ab, y_ab, yaw_ab_rad, sqrt_info)));
+    }
+
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+private:
+    const Eigen::Vector2d p_ab;
+    const double yaw_ab_rad;
+    const Eigen::Matrix3d sqrt_info;
+};
