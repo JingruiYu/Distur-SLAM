@@ -32,7 +32,7 @@ add_library(${PROJECT_NAME}
     src/SE2.cpp
     src/keyFrame.cpp
     src/optimizer.cpp
-    src/line.cpp
+    src/lineport.cpp
     src/LineExtractor.cpp
     src/KeyLineGeometry.cpp
     src/FeatureLine.cpp
