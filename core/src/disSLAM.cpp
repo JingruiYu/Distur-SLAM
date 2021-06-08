@@ -111,15 +111,11 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
 
     lastFrame = curFrame;
 
-    if (cKF == 0)
+    if (needKF())
     {
-        cKF = 0;
+        // std::cout << "need KF in frame: " << curFrame->idx << std::endl;
         lastKF = new keyFrame(curFrame);
         mpMap->addkeyFrame(lastKF);
-    }
-    else
-    {
-        cKF++;
     }
     
     return;
@@ -169,9 +165,19 @@ void disSLAM::checkT(SE2 &_Tc1c2)
     {
         std::cout << " delta_cam_pos: " << delta_cam_pos << ", delta_cam_ori: " << delta_cam_ori << std::endl;
     }
-    
-    
+
     // std::cout << "lastFrame: " << lastFrame->idx << ", " << lastFrame->mGtPose.x << ", " << lastFrame->mGtPose.y << ", " << lastFrame->mGtPose.theta << std::endl;
-    // std::cout << "curFrame: " << curFrame->idx << ", " << curFrame->mGtPose.x << ", " << curFrame->mGtPose.y << ", " << curFrame->mGtPose.theta << std::endl;
+    // std::cout << "curFrame: " << curFrame->idx << ", " << curFrame->mGtPose.x << ", " << curFrame->mGtPose.y << ", " << curFrame->mGtPose.theta << std::endl;    
+}
+
+bool disSLAM::needKF()
+{
+    bool c1 = false;
+    if (curFrame->idx - lastKF->mpF->idx > 0)
+    {
+        c1 = true;
+    }
     
+    bool fc = c1;
+    return fc;
 }

@@ -35,4 +35,5 @@ public:
 
 	static cv::Point2f BirdviewPT2XY(const cv::Point2f& pt);
 	static cv::Point2f XY2BirdviewPT(const cv::Point2f& pt);
+	static cv::Point2f XY2BirdviewPT(const cv::Mat& Mp);
 };

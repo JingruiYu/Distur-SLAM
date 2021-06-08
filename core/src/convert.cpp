@@ -153,3 +153,12 @@ cv::Point2f convert::XY2BirdviewPT(const cv::Point2f& p)
 
     return pt;
 }
+
+cv::Point2f convert::XY2BirdviewPT(const cv::Mat& Mp)
+{
+	cv::Point2f pt;
+    pt.x = config::birdviewCols/2-Mp.at<float>(1)*config::meter2pixel;
+    pt.y = config::birdviewRows/2-(Mp.at<float>(0)-config::rear_axle_to_center)*config::meter2pixel;
+
+    return pt;
+}

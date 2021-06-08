@@ -293,6 +293,38 @@ cv::Mat poseSolver::FindtICP2D(const std::vector<cv::Point2f> &vKeys1, const std
     tc2w.copyTo(Tc2w.rowRange(0,2).col(2));
     Twc2 = Tc2w.inv();
 
+    if (false)
+    {
+        cv::Mat img_show = curFrame->img.clone();
+        const float r = 5;
+        for (int i = 0; i < N2; i++)
+        {
+            cv::Mat Pc2 = vPc2[i];
+            cv::Point2f uv2 = convert::XY2BirdviewPT(Pc2);
+            cv::circle(img_show, uv2, 2, cv::Scalar(255,0,0), -1);
+        }
+
+        for (size_t i = 0; i < N1; i++)
+        {
+            cv::Mat Pc2 = vPc1inc2[i];
+            Pc2.at<float>(0) += tc2w.at<float>(0);
+            Pc2.at<float>(1) += tc2w.at<float>(1);
+
+            cv::Point2f uv2 = convert::XY2BirdviewPT(Pc2);
+
+            cv::Point2f pt1,pt2;
+            pt1.x=uv2.x-r;
+            pt1.y=uv2.y-r;
+            pt2.x=uv2.x+r;
+            pt2.y=uv2.y+r;
+
+            cv::rectangle(img_show,pt1,pt2,cv::Scalar(0,0,255));
+        }
+        
+        std::string writeFolder = "/Users/yujingrui/Downloads/Distur-SLAM/core/resImg/";
+        cv::imwrite(writeFolder+std::to_string(curFrame->idx)+"_pt.png", img_show);
+        cv::waitKey(30);
+    }
     // std::cout << "Tc2w : "<< std::endl << Tc2w << std::endl;
     // std::cout << "Rc2w : "<< std::endl << Rc2w << std::endl;
     // std::cout << "tc2w : "<< std::endl << tc2w << std::endl;

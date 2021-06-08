@@ -31,6 +31,8 @@ public:
 
     void checkT(cv::Mat &Tc1c2);
     void checkT(SE2 &Tc1c2);
+
+    bool needKF();
     
 public:
     Frame *curFrame  = nullptr;
@@ -38,8 +40,6 @@ public:
     keyFrame *lastKF = nullptr;
     view *mpViewer = nullptr;
     map *mpMap = nullptr;
-
-    int cKF = 0;
 
     std::ofstream resFile;
 
