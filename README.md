@@ -21,3 +21,5 @@ v2.5 : check rotation
 v2.7 : translation with rotation from line is down. v2.7 : translation with rotation from line is down.
 
 v2.8 : check translation
+
+v2.9 : pose optimization
