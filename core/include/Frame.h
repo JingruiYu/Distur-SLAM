@@ -22,6 +22,7 @@ public:
 	~Frame();
 
 	void setTwc(cv::Mat &Twc);
+	void setTwc(SE2 &se2Twc);
 
 	bool extractFastPoint();
 	bool setMappoints(std::vector<cv::Point2f>& _vPoints);

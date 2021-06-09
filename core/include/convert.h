@@ -20,6 +20,8 @@ class convert
 public:
 	static double normalize_angle(double theta);
 
+	static SE2 getDetlaTcc(SE2 gt1, SE2 gt2);
+
 	static SE2 toSE2(const cv::Mat &cvT);
 	static SE2 toSE2(const Eigen::Matrix3d &cvT);
 

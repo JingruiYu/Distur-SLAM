@@ -22,3 +22,4 @@ photometric/DirectBA/0302DirectCeresBA/cmake/
 .vscode/launch.json
 core/resImg/
 core/testres.txt
+core/.vscode/launch.json

@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include "map.h"
+#include <algorithm>
 
 map::map()
 {
@@ -35,6 +36,21 @@ void map::addkeyFrame(keyFrame* pKF)
 std::vector<keyFrame*> map::getKeyFrameAll()
 {
 	return std::vector<keyFrame*>(vkeyFrame.begin(),vkeyFrame.end());
+}
+
+std::vector<keyFrame*> map::getLocalKeyFrame(int num)
+{
+    std::vector<keyFrame*> vlocalKF;
+
+    for (std::vector<keyFrame*>::reverse_iterator it = vkeyFrame.rbegin(); it != vkeyFrame.rbegin()+num && it != vkeyFrame.rend(); it++ )
+    {
+        keyFrame* pKF = *it;
+        vlocalKF.push_back(pKF);
+    }
+    
+    reverse(vlocalKF.begin(),vlocalKF.end());
+    
+    return vlocalKF;
 }
 
 void map::SetMajorLine(const birdview::Line &major_line)

@@ -116,6 +116,17 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
         // std::cout << "need KF in frame: " << curFrame->idx << std::endl;
         lastKF = new keyFrame(curFrame);
         mpMap->addkeyFrame(lastKF);
+
+        std::vector<keyFrame*> vlocalKF = mpMap->getLocalKeyFrame(10);
+
+        // std::cout << "vlocalKF.size: " << vlocalKF.size() << std::endl; 
+        // for (size_t i = 0; i < vlocalKF.size(); i++)
+        // {
+        //     std::cout << "kf ID: " << vlocalKF[i]->mnId << std::endl;
+        // }
+        
+        optimizer::poseGraphOptimize(vlocalKF);
+        // optimizer::testposeGraphOptimize();
     }
     
     return;
@@ -173,7 +184,8 @@ void disSLAM::checkT(SE2 &_Tc1c2)
 bool disSLAM::needKF()
 {
     bool c1 = false;
-    if (curFrame->idx - lastKF->mpF->idx > 0)
+    int frameDis = 10;
+    if (curFrame->idx - lastKF->mpF->idx > frameDis)
     {
         c1 = true;
     }

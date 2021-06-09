@@ -21,6 +21,7 @@ public:
 	void addkeyFrame(keyFrame* pKF);
 
 	std::vector<keyFrame*> getKeyFrameAll();
+	std::vector<keyFrame*> getLocalKeyFrame(int num);
 
 	void SetMajorLine(const birdview::Line& major_line);
 	bool GetMajorLine(birdview::Line& major_line);

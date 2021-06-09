@@ -22,6 +22,15 @@ double convert::normalize_angle(double theta)
 	return theta;
 }
 
+SE2 convert::getDetlaTcc(SE2 gt1, SE2 gt2)
+{
+    cv::Mat gtTwc1 = convert::tocvMat(gt1);
+    cv::Mat gtTcc = gtTwc1.inv() * convert::tocvMat(gt2);
+    SE2 gtse = convert::toSE2(gtTcc);
+
+    return gtse;
+}
+
 SE2 convert::toSE2(const cv::Mat &cvT)
 {
 	double yaw = std::atan2(cvT.at<float>(1,0), cvT.at<float>(0,0));

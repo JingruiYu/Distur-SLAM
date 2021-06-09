@@ -83,6 +83,12 @@ void Frame::setTwc(cv::Mat &_Twc)
     // std::cout << "eigen mat is: " << std::endl << mT << std::endl;
 }
 
+void Frame::setTwc(SE2 &se2Twc)
+{
+    se2Twc = se2Twc;
+    Twc = convert::tocvMat(se2Twc);
+}
+
 bool Frame::setMappoints(std::vector<cv::Point2f>& _vPoints)
 {
     vPoint2fs.clear();

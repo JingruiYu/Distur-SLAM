@@ -19,6 +19,7 @@ class optimizer
 public:
 	static void FrameDirectOptimization(Frame* pF1, Frame* pF2, cv::Mat &Tc1c2);
 	static void OptimizeMajorLine(const std::vector<KeyLine>& vKeyLines, const std::vector<bool>& vIsParallel, cv::Point3f& le);
-
+	static void poseGraphOptimize(std::vector<keyFrame*>& vlocalKF);
+	static void testposeGraphOptimize();
 };
 
