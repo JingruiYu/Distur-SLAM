@@ -54,9 +54,10 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
             mpMap->SetMajorLine(major_line);
         }
 
-        mpMap->addFrame(curFrame);
+        // mpMap->addFrame(curFrame);
         lastFrame = curFrame;
         lastKF = new keyFrame(curFrame);
+        mpMap->addkeyFrame(lastKF);
         return;
     }
 
@@ -104,11 +105,6 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
     // std::cout << "curKF: " << curKF->idx << ", curFrame: " << curFrame->idx << std::endl;
     // mpMap->addkeyFrame(curFrame);
     
-    // viewer
-#ifndef macdebugwithoutviewer
-    mpViewer->runcore(_idx);
-#endif
-
     lastFrame = curFrame;
 
     if (needKF())
@@ -117,17 +113,20 @@ void disSLAM::TrackwithOF(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _t
         lastKF = new keyFrame(curFrame);
         mpMap->addkeyFrame(lastKF);
 
-        std::vector<keyFrame*> vlocalKF = mpMap->getLocalKeyFrame(10);
-
-        // std::cout << "vlocalKF.size: " << vlocalKF.size() << std::endl; 
-        // for (size_t i = 0; i < vlocalKF.size(); i++)
-        // {
-        //     std::cout << "kf ID: " << vlocalKF[i]->mnId << std::endl;
-        // }
-        
-        optimizer::poseGraphOptimize(vlocalKF);
-        // optimizer::testposeGraphOptimize();
+        // std::vector<keyFrame*> vlocalKF = mpMap->getLocalKeyFrame(10);
+        // std::vector<keyFrame*> vlocalKF = mpMap->getKeyFrameAll();  
+        std::vector<keyFrame*> vlocalKF = mpMap->getPartKeyFrame();
+        if (vlocalKF.size() > 50)
+        {  
+            optimizer::poseGraphOptimize(vlocalKF);
+            // optimizer::testposeGraphOptimize();
+        }
     }
+
+    // viewer
+#ifndef macdebugwithoutviewer
+    mpViewer->runcore(_idx);
+#endif
     
     return;
 }
@@ -184,7 +183,7 @@ void disSLAM::checkT(SE2 &_Tc1c2)
 bool disSLAM::needKF()
 {
     bool c1 = false;
-    int frameDis = 10;
+    int frameDis = 0;
     if (curFrame->idx - lastKF->mpF->idx > frameDis)
     {
         c1 = true;
