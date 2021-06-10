@@ -7,6 +7,21 @@
 #include "SE2.h"
 #include "convert.h"
 
+double SE2::normalize_angle(double theta)
+{
+  if (theta >= -M_PI && theta < M_PI)
+    return theta;
+
+  double multiplier = floor(theta / (2*M_PI));
+  theta = theta - multiplier*2*M_PI;
+  if (theta >= M_PI)
+    theta -= 2*M_PI;
+  if (theta < -M_PI)
+    theta += 2*M_PI;
+
+  return theta;
+}
+
 SE2::SE2(double _x, double _y, double _theta): x(_x), y(_y), theta(_theta)
 {
 }
@@ -35,6 +50,28 @@ Eigen::Matrix4d SE2::toMatrix4d()
             0, 0, 0, 1;
 
     return mat;
+}
+
+SE2 SE2::operator+(const SE2& that) const
+{
+    double c = std::cos(theta);
+    double s = std::sin(theta);
+    double _x = x + that.x*c - that.y*s;
+    double _y = y + that.x*s + that.y*c;
+    double _theta = normalize_angle(theta + that.theta);
+    return SE2(_x, _y, _theta);
+}
+
+// that.inv() + *this
+SE2 SE2::operator-(const SE2& that) const
+{
+    double dx = x - that.x;
+    double dy = y - that.y;
+    double dth = normalize_angle(theta - that.theta);
+
+    double c = std::cos(that.theta);
+    double s = std::sin(that.theta);
+    return SE2(c*dx+s*dy, -s*dx+c*dy, dth);
 }
 
 // current -> world

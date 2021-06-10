@@ -21,7 +21,12 @@ public:
 
 	Eigen::Matrix4d toMatrix4d();
 
+	SE2 operator+(const SE2& that) const;
+    SE2 operator-(const SE2& that) const;
 	cv::Point2f operator*(const cv::Point2f& pt) const;
+
+	static double normalize_angle(double theta);
+	
 public:
 	double x, y, theta;
 };

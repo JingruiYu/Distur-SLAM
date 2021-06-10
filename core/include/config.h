@@ -1,6 +1,6 @@
 #pragma once
 
-#define macdebugwithoutviewer
+// #define macdebugwithoutviewer
 
 
 
@@ -15,6 +15,10 @@ public:
     static const float vehicle_length;
     static const float vehicle_width;
     static const float correction;
+
+    static const float noiseX;
+    static const float noiseY;
+    static const float noiseYaw;
 
     static bool useLineForRotation;
 };

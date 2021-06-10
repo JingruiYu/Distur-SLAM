@@ -38,6 +38,25 @@ std::vector<keyFrame*> map::getKeyFrameAll()
 	return std::vector<keyFrame*>(vkeyFrame.begin(),vkeyFrame.end());
 }
 
+std::vector<keyFrame*> map::getPartKeyFrame()
+{
+    std::vector<keyFrame*> vlocalKF;
+    
+    if (vkeyFrame.size() >= beginIdx + detla)
+    {
+        int i = beginIdx;        
+        for (; i < vkeyFrame.size(); i++)
+        {
+            vlocalKF.push_back(vkeyFrame[i]);
+        }
+
+        beginIdx += 290;
+        detla += 250;
+    }
+    
+    return vlocalKF;
+}
+
 std::vector<keyFrame*> map::getLocalKeyFrame(int num)
 {
     std::vector<keyFrame*> vlocalKF;

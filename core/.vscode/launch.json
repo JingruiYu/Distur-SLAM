@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "./build/main",  // 该文件夹下的该文件
-            "args": ["./data/downshort/"],
+            "args": ["../testdata/saic/downshort/"],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Build with Clang"
         }

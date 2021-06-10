@@ -24,7 +24,7 @@ Frame::Frame(int _idx, cv::Mat &_img, cv::Mat &_img_mask, double _timestamp, cv:
     clahe->apply(img_gray, img_clahe);
     cv::buildOpticalFlowPyramid(img_clahe, img_pyr, cv::Size(21, 21), 3);
 
-    if (_idx % 7 == 0)
+    if (_idx % 17 == 0)
     {
         std::cout << "Frame " << _idx << " is init ... " << std::endl;
     }
